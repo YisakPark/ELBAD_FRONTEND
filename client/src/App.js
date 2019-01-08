@@ -14,7 +14,9 @@ import Topbar from "./components/layout/Topbar";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
-import Register from "./components/auth/Register";
+import Register from "./components/auth/register/Register";
+import AdvertiserRegister from "./components/auth/register/AdvertiserRegister";
+import CreatorRegister from "./components/auth/register/CreatorRegister";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
@@ -61,6 +63,16 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <div className="container">
               <Route exact path="/register" component={Register} />
+              <Route
+                exact
+                path="/register/advertiser"
+                component={AdvertiserRegister}
+              />
+              <Route
+                exact
+                path="/register/creator"
+                component={CreatorRegister}
+              />
               <Route exact path="/login" component={Login} />
               <Route exact path="/profiles" component={Profiles} />
               <Route exact path="/profile/:handle" component={Profile} />
