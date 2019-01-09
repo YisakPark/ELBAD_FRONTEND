@@ -113,6 +113,168 @@
       integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
       crossorigin="anonymous"
     ></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script type="text/javascript">
+      var date = new Date(Date.now());
+      var dateString = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000
+      )
+        .toISOString()
+        .split("T")[0];
+      function get_youtube_channel_detail() {
+        authenticate()
+          .then(loadClient)
+          .then(get_subscribers_views)
+          .then(get_viewers_age_group)
+          .then(get_viewers_countries)
+          .then(get_viewers_gender);
+      }
+      var total_views = 0;
+      function authenticate() {
+        return gapi.auth2
+          .getAuthInstance()
+          .signIn()
+          .then(
+            function() {
+              console.log("Sign-in successful");
+            },
+            function(err) {
+              console.error("Error signing in", err);
+            }
+          );
+      }
+      function loadClient() {
+        return gapi.client
+          .load(
+            "https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2"
+          )
+          .then(
+            function() {
+              console.log("GAPI client loaded for API");
+            },
+            function(err) {
+              console.error("Error loading GAPI client for API", err);
+            }
+          );
+      }
+      // Make sure the client is loaded and sign-in is complete before calling this method.
+      function get_subscribers_views() {
+        return gapi.client.youtubeAnalytics.reports
+          .query({
+            ids: "channel==MINE",
+            startDate: "2005-02-14", //yotubue establishment date
+            endDate: dateString,
+            metrics: "views,subscribersGained,subscribersLost"
+          })
+          .then(
+            function(response) {
+              // Handle the results here (response.result has the parsed body).
+              var result = response["result"]["rows"][0];
+              total_views = result[0];
+              console.log("total views: ", total_views);
+              console.log("subscribers: ", result[1] - result[2]);
+            },
+            function(err) {
+              console.error("Execute error", err);
+            }
+          );
+      }
+      // Make sure the client is loaded and sign-in is complete before calling this method.
+      function get_viewers_age_group() {
+        return gapi.client.youtubeAnalytics.reports
+          .query({
+            ids: "channel==MINE",
+            startDate: "2005-02-14", //yotubue establishment date
+            endDate: dateString,
+            metrics: "viewerPercentage",
+            dimensions: "ageGroup"
+          })
+          .then(
+            function(response) {
+              // Handle the results here (response.result has the parsed body).
+              var result_arr = response["result"]["rows"];
+              console.log("viewer percentage divided by age group: ");
+              for (var key in result_arr) {
+                var res = result_arr[key];
+                console.log(res[0] + ": " + res[1] + "%");
+              }
+            },
+            function(err) {
+              console.error("Execute error", err);
+            }
+          );
+      }
+      // Make sure the client is loaded and sign-in is complete before calling this method.
+      function get_viewers_countries() {
+        return gapi.client.youtubeAnalytics.reports
+          .query({
+            ids: "channel==MINE",
+            startDate: "2005-02-14", //yotubue establishment date
+            endDate: dateString,
+            metrics: "views",
+            dimensions: "country",
+            sort: "-views"
+          })
+          .then(
+            function(response) {
+              // Handle the results here (response.result has the parsed body).
+              var result_arr = response["result"]["rows"];
+              var accumalated_percentage = 0;
+              console.log("viewer percentage divided by country: ");
+              for (var key in result_arr) {
+                if (key >= 10) {
+                  console.log(
+                    "other countries: " + (100 - accumalated_percentage) + "%"
+                  );
+                  break;
+                }
+                var res = result_arr[key];
+                var view_percentage = (res[1] / total_views) * 100;
+                accumalated_percentage += view_percentage;
+                console.log(res[0] + ": " + view_percentage + "%");
+              }
+            },
+            function(err) {
+              console.error("Execute error", err);
+            }
+          );
+      }
+      function get_viewers_gender() {
+        return gapi.client.youtubeAnalytics.reports
+          .query({
+            ids: "channel==MINE",
+            startDate: "2005-02-14", //yotubue establishment date
+            endDate: dateString,
+            metrics: "viewerPercentage",
+            dimensions: "gender"
+          })
+          .then(
+            function(response) {
+              // Handle the results here (response.result has the parsed body).
+              var result_arr = response["result"]["rows"];
+              console.log("viewer percentage divided by gender: ");
+              console.log(result_arr[0][0] + ": " + result_arr[0][1] + "%");
+              console.log(result_arr[1][0] + ": " + result_arr[1][1] + "%");
+            },
+            function(err) {
+              console.error("Execute error", err);
+            }
+          );
+      }
+      function gapi_load() {
+        gapi.load("client:auth2", function() {
+          gapi.auth2.init({
+            apiKey: "AIzaSyDR-OmGt0fMTgV4IEK_ddcw9GT3PIVT5O8",
+            clientId:
+              "335340556270-gpcf439i9nvoe07mkue8a2rmtd7dft0h.apps.googleusercontent.com",
+            scope: "https://www.googleapis.com/auth/yt-analytics.readonly"
+          });
+        });
+      }
+      function demo() {
+        alert("Function from index.html");
+      }
+    </script>
     <!--
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper.js/umd/popper.min.js"></script>

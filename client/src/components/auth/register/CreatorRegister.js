@@ -30,6 +30,7 @@ class CreatorRegister extends Component {
   }
 
   componentDidMount() {
+    window.gapi_load();
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/");
     }
@@ -202,12 +203,22 @@ class CreatorRegister extends Component {
                       error={errors.product_delivery_recipient}
                       id="register_product_delivery_recipient"
                     />
+                    <div className="text-center mb-4">
+                      <button
+                        type="button"
+                        className="btn btn-info"
+                        onClick={window.get_youtube_channel_detail}
+                      >
+                        <i className="fa fa-youtube-play" /> 유투브 채널
+                        상세정보 불러들이기
+                      </button>
+                    </div>
                     <div className="text-center">
                       <button
                         type="submit"
                         className="btn btn-template-outlined"
                       >
-                        <i className="fa fa-user-md" /> Register
+                        <i className="fa fa-user-md" /> 등록
                       </button>
                     </div>
                   </form>
