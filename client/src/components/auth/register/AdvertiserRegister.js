@@ -61,7 +61,7 @@ class AdvertiserRegister extends Component {
       company_introduction: this.state.company_introduction,
       company_homepage: this.state.company_homepage,
       company_photo: this.state.company_photo,
-      company_type: this.state
+      company_type: this.state.company_type
     };
 
     this.props.registerUser(newUser, this.props.history);
@@ -110,6 +110,7 @@ class AdvertiserRegister extends Component {
                       label="*이메일"
                       placeholder="이메일"
                       name="email"
+                      type="email"
                       value={this.state.email}
                       onChange={this.onChange}
                       error={errors.email}
@@ -119,6 +120,7 @@ class AdvertiserRegister extends Component {
                       label="*비밀번호"
                       placeholder="비밀번호"
                       name="password"
+                      type="password"
                       value={this.state.password}
                       onChange={this.onChange}
                       error={errors.password}
@@ -128,6 +130,7 @@ class AdvertiserRegister extends Component {
                       label="*비밀번호확인"
                       placeholder="비밀번호확인"
                       name="password2"
+                      type="password"
                       value={this.state.password2}
                       onChange={this.onChange}
                       error={errors.password2}

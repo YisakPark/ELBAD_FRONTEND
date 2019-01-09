@@ -121,41 +121,38 @@
       )
         .toISOString()
         .split("T")[0];
+      var resultant_JSON = new Object();
       function get_youtube_channel_detail() {
         authenticate()
           .then(loadClient)
           .then(get_subscribers_views)
           .then(get_viewers_age_group)
           .then(get_viewers_countries)
-          .then(get_viewers_gender);
+          .then(get_viewers_gender)
+          .then(() => {
+            // construct an HTTP request
+            var xhr = new XMLHttpRequest();
+            xhr.open("post", "http://localhost:4000/api/users/test", true);
+            xhr.setRequestHeader(
+              "Content-Type",
+              "application/json; charset=UTF-8"
+            );
+
+            // send the collected data as JSON
+            xhr.send(JSON.stringify(resultant_JSON));
+          })
+          .catch(err => {
+            console.log("Error occurs: " + err);
+          });
       }
       var total_views = 0;
       function authenticate() {
-        return gapi.auth2
-          .getAuthInstance()
-          .signIn()
-          .then(
-            function() {
-              console.log("Sign-in successful");
-            },
-            function(err) {
-              console.error("Error signing in", err);
-            }
-          );
+        return gapi.auth2.getAuthInstance().signIn();
       }
       function loadClient() {
-        return gapi.client
-          .load(
-            "https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2"
-          )
-          .then(
-            function() {
-              console.log("GAPI client loaded for API");
-            },
-            function(err) {
-              console.error("Error loading GAPI client for API", err);
-            }
-          );
+        return gapi.client.load(
+          "https://youtubeanalytics.googleapis.com/$discovery/rest?version=v2"
+        );
       }
       // Make sure the client is loaded and sign-in is complete before calling this method.
       function get_subscribers_views() {
@@ -171,8 +168,11 @@
               // Handle the results here (response.result has the parsed body).
               var result = response["result"]["rows"][0];
               total_views = result[0];
+              var subscribers = result[1] - result[2];
               console.log("total views: ", total_views);
-              console.log("subscribers: ", result[1] - result[2]);
+              console.log("subscribers: ", subscribers);
+              resultant_JSON["total_views"] = total_views;
+              resultant_JSON["subscribers"] = subscribers;
             },
             function(err) {
               console.error("Execute error", err);
@@ -192,11 +192,13 @@
           .then(
             function(response) {
               // Handle the results here (response.result has the parsed body).
+              resultant_JSON.age_group = new Object();
               var result_arr = response["result"]["rows"];
               console.log("viewer percentage divided by age group: ");
               for (var key in result_arr) {
                 var res = result_arr[key];
                 console.log(res[0] + ": " + res[1] + "%");
+                resultant_JSON["age_group"][res[0]] = res[1];
               }
             },
             function(err) {
@@ -218,6 +220,7 @@
           .then(
             function(response) {
               // Handle the results here (response.result has the parsed body).
+              resultant_JSON["country"] = new Object();
               var result_arr = response["result"]["rows"];
               var accumalated_percentage = 0;
               console.log("viewer percentage divided by country: ");
@@ -226,12 +229,15 @@
                   console.log(
                     "other countries: " + (100 - accumalated_percentage) + "%"
                   );
+                  resultant_JSON["country"]["other_countries"] =
+                    100 - accumalated_percentage;
                   break;
                 }
                 var res = result_arr[key];
                 var view_percentage = (res[1] / total_views) * 100;
                 accumalated_percentage += view_percentage;
                 console.log(res[0] + ": " + view_percentage + "%");
+                resultant_JSON["country"][res[0]] = res[1];
               }
             },
             function(err) {
@@ -251,10 +257,13 @@
           .then(
             function(response) {
               // Handle the results here (response.result has the parsed body).
+              resultant_JSON["gender"] = new Object();
               var result_arr = response["result"]["rows"];
               console.log("viewer percentage divided by gender: ");
               console.log(result_arr[0][0] + ": " + result_arr[0][1] + "%");
+              resultant_JSON["gender"][result_arr[0][0]] = result_arr[0][1];
               console.log(result_arr[1][0] + ": " + result_arr[1][1] + "%");
+              resultant_JSON["gender"][result_arr[1][0]] = result_arr[1][1];
             },
             function(err) {
               console.error("Execute error", err);
@@ -270,9 +279,6 @@
             scope: "https://www.googleapis.com/auth/yt-analytics.readonly"
           });
         });
-      }
-      function demo() {
-        alert("Function from index.html");
       }
     </script>
     <!--

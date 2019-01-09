@@ -27,6 +27,7 @@ class CreatorRegister extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   componentDidMount() {
@@ -65,6 +66,11 @@ class CreatorRegister extends Component {
     };
 
     this.props.registerUser(newUser, this.props.history);
+  }
+
+  onClick(e) {
+    e.preventDefault();
+    window.get_youtube_channel_detail();
   }
 
   render() {
@@ -207,7 +213,7 @@ class CreatorRegister extends Component {
                       <button
                         type="button"
                         className="btn btn-info"
-                        onClick={window.get_youtube_channel_detail}
+                        onClick={this.onClick}
                       >
                         <i className="fa fa-youtube-play" /> 유투브 채널
                         상세정보 불러들이기
@@ -221,6 +227,7 @@ class CreatorRegister extends Component {
                         <i className="fa fa-user-md" /> 등록
                       </button>
                     </div>
+                    <p id="yeah">content</p>
                   </form>
                 </div>
               </div>
