@@ -5,12 +5,14 @@ import { connect } from "react-redux";
 import { registerUser } from "../../../actions/authActions";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import TextAreaFieldGroup from "../../common/TextAreaFieldGroup";
+import SelectFieldGroup from "../../common/SelectFieldGroup";
 
 class AdvertiserRegister extends Component {
   constructor() {
     super();
     this.state = {
       errors: {},
+      imagePreviewUrl: "",
       user_type: "advertiser",
       email: "",
       name: "",
@@ -27,6 +29,7 @@ class AdvertiserRegister extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onChange_img = this.onChange_img.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +46,23 @@ class AdvertiserRegister extends Component {
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+
+  onChange_img(e) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        company_photo: file,
+        imagePreviewUrl: reader.result
+      });
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   }
 
   onSubmit(e) {
@@ -69,6 +89,12 @@ class AdvertiserRegister extends Component {
 
   render() {
     const { errors } = this.state;
+    let { imagePreviewUrl } = this.state;
+    let $imagePreview = null;
+    if (imagePreviewUrl)
+      $imagePreview = (
+        <img src={imagePreviewUrl} className="img-thumbnail img-fluid" />
+      );
 
     return (
       <div>
@@ -166,7 +192,7 @@ class AdvertiserRegister extends Component {
                     <TextAreaFieldGroup
                       label="*회사 소개"
                       placeholder="회사 소개"
-                      name="bio"
+                      name="company_introduction"
                       value={this.state.company_introduction}
                       onChange={this.onChange}
                       error={errors.company_introduction}
@@ -175,34 +201,55 @@ class AdvertiserRegister extends Component {
                     <TextFieldGroup
                       label="회사 홈페이지"
                       placeholder="회사 홈페이지"
+                      서
                       name="company_homepage"
                       value={this.state.company_homepage}
                       onChange={this.onChange}
                       error={errors.company_homepage}
                       id="register_company_homepage"
                     />
-                    {/*
-                    TODO: Photo upload
-                    <TextFieldGroup
-                      label="회사 프로필 사진"
-                      placeholder="회사 프로필 사진"
-                      name="company_photo"
-                      value={this.state.company_photo}
-                      onChange={this.onChange}
-                      error={errors.company_photo}
-                      id="register_company_photo"
-                    />*/}
-                    {/*
-                    TODO: Dropdown
-                    <TextFieldGroup
+                    <SelectFieldGroup
                       label="*사업자 유형"
-                      placeholder="사업자 유형"
                       name="company_type"
-                      value={this.state.creator_photo}
+                      placeholder="사업자 유형을 선택하세요"
+                      selected_value={this.state.company_type}
+                      values={[
+                        "corporate_business",
+                        "individual_business",
+                        "free_lancer"
+                      ]}
+                      contents={["법인사업자", "개인사업자", "프리랜서"]}
                       onChange={this.onChange}
-                      error={errors.creator_photo}
-                      id="register_creator_photo"
-                    />*/}
+                      error={errors.company_type}
+                      id="register_company_type"
+                    />
+                    <div className="mb-4 form-group">
+                      <label htmlFor="register_company_photo">
+                        프로필 사진
+                      </label>
+                      <div className="input-group mb-3">
+                        <div className="custom-file mr-2">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            id="register_company_photo"
+                            aria-describedby="inputGroupFileAddon01"
+                            onChange={this.onChange_img}
+                            accept="image/x-png,image/gif,image/jpeg"
+                          />
+                          <label
+                            className="custom-file-label"
+                            htmlFor="inputGroupFile01"
+                          >
+                            사진을 선택하세요
+                          </label>
+                        </div>
+                        <div>
+                          {/* div for image preview */}
+                          {$imagePreview}
+                        </div>
+                      </div>
+                    </div>
                     <div className="text-center">
                       <button
                         type="submit"

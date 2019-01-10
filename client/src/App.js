@@ -65,12 +65,12 @@ class App extends Component {
               <Route exact path="/register" component={Register} />
               <Route
                 exact
-                path="/register/advertiser"
+                path="/register_advertiser"
                 component={AdvertiserRegister}
               />
               <Route
                 exact
-                path="/register/creator"
+                path="/register_creator"
                 component={CreatorRegister}
               />
               <Route exact path="/login" component={Login} />
@@ -115,9 +115,7 @@ class App extends Component {
               </Switch>
               <Route exact path="/not-found" component={NotFound} />
             </div>
-            {/*
             <Footer />
-  */}
           </div>
         </Router>
       </Provider>

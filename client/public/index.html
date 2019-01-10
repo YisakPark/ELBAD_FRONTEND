@@ -237,7 +237,7 @@
                 var view_percentage = (res[1] / total_views) * 100;
                 accumalated_percentage += view_percentage;
                 console.log(res[0] + ": " + view_percentage + "%");
-                resultant_JSON["country"][res[0]] = res[1];
+                resultant_JSON["country"][res[0]] = view_percentage;
               }
             },
             function(err) {

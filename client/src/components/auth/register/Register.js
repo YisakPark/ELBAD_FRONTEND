@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 class Register extends Component {
   componentDidMount() {
@@ -38,7 +37,7 @@ class Register extends Component {
                 <div className="box">
                   <div className="row justify-content-center">
                     <div className="col-md-6 text-center">
-                      <Link to="/register/advertiser">
+                      <Link to="/register_advertiser">
                         <button
                           type="button"
                           className="btn btn-outline-primary"
@@ -48,7 +47,7 @@ class Register extends Component {
                       </Link>
                     </div>
                     <div className="col-md-6 text-center">
-                      <Link to="/register/creator">
+                      <Link to="/register_creator">
                         <button
                           type="button"
                           className="btn btn-outline-primary"

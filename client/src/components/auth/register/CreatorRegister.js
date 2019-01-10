@@ -11,6 +11,7 @@ class CreatorRegister extends Component {
     super();
     this.state = {
       errors: {},
+      imagePreviewUrl: "",
       user_type: "creator",
       email: "",
       name: "",
@@ -28,6 +29,7 @@ class CreatorRegister extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onChange_img = this.onChange_img.bind(this);
   }
 
   componentDidMount() {
@@ -47,11 +49,29 @@ class CreatorRegister extends Component {
     this.setState({ [e.target.name]: e.target.value });
   }
 
+  onChange_img(e) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        creator_photo: file,
+        imagePreviewUrl: reader.result
+      });
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
     const newUser = {
       user_type: this.state.user_type,
+
       email: this.state.email,
       name: this.state.name,
       password: this.state.password,
@@ -75,6 +95,13 @@ class CreatorRegister extends Component {
 
   render() {
     const { errors } = this.state;
+    let { imagePreviewUrl } = this.state;
+    let $imagePreview = null;
+    if (imagePreviewUrl)
+      $imagePreview = (
+        <img src={imagePreviewUrl} className="img-thumbnail img-fluid" />
+      );
+
     return (
       <div>
         <div id="heading-breadcrumbs">
@@ -176,20 +203,6 @@ class CreatorRegister extends Component {
                       error={errors.creator_introduction}
                       id="register_creator_introduction"
                     />
-                    {/*
-                    TODO: photo upload
-                    <TextFieldGroup
-                      label="*크리에이터 활동 사진"
-                      placeholder="크리에이터 활동 사진"
-                      name="creator_photo"
-                      value={this.state.creator_photo}
-                      onChange={this.onChange}
-                      error={errors.creator_photo}
-                      id="register_creator_photo"
-                    />
-                    */}
-                    {/*
-                    TODO: Location Track api
                     <TextFieldGroup
                       label="*제품 배송 받을 주소"
                       placeholder="제품 배송 받을 주소"
@@ -199,7 +212,6 @@ class CreatorRegister extends Component {
                       error={errors.product_delivery_address}
                       id="register_product_delivery_address"
                     />
-                    */}
                     <TextFieldGroup
                       label="*제품 배송 수령인"
                       placeholder="제품 배송 수령인"
@@ -209,6 +221,33 @@ class CreatorRegister extends Component {
                       error={errors.product_delivery_recipient}
                       id="register_product_delivery_recipient"
                     />
+                    <div className="mb-4 form-group">
+                      <label htmlFor="register_creator_photo">
+                        *프로필 사진
+                      </label>
+                      <div className="input-group mb-3">
+                        <div className="custom-file mr-2">
+                          <input
+                            type="file"
+                            className="custom-file-input"
+                            id="register_creator_photo"
+                            aria-describedby="inputGroupFileAddon01"
+                            onChange={this.onChange_img}
+                            accept="image/x-png,image/gif,image/jpeg"
+                          />
+                          <label
+                            className="custom-file-label"
+                            htmlFor="inputGroupFile01"
+                          >
+                            사진을 선택하세요
+                          </label>
+                        </div>
+                        <div>
+                          {/* div for image preview */}
+                          {$imagePreview}
+                        </div>
+                      </div>
+                    </div>
                     <div className="text-center mb-4">
                       <button
                         type="button"
@@ -227,7 +266,6 @@ class CreatorRegister extends Component {
                         <i className="fa fa-user-md" /> 등록
                       </button>
                     </div>
-                    <p id="yeah">content</p>
                   </form>
                 </div>
               </div>
