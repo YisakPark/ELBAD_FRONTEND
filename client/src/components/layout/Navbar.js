@@ -47,16 +47,20 @@ class Navbar extends Component {
                     </li>
                     <li className="dropdown-item">
                       <a href="youtuber_guide.html" className="nav-link">
-                        유투버 가이드
+                        크리에이터 가이드
                       </a>
                     </li>
                   </ul>
                 </li>
                 <li className="nav-item">
-                  <a href="campaign_list.html">캠페인 리스트 </a>
+                  <Link to="/campaign_list" className="nav-link">
+                    캠페인 리스트
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a href="youtuber_list.html">유투버 리스트 </a>
+                  <Link to="/creator_list" className="nav-link">
+                    크리에이터 리스트
+                  </Link>
                 </li>
                 <li className="nav-item dropdown">
                   <a
@@ -79,37 +83,6 @@ class Navbar extends Component {
                     </li>
                   </ul>
                 </li>
-                <li className="nav-item dropdown">
-                  <a
-                    href="#"
-                    data-toggle="dropdown"
-                    className="dropdown-toggle"
-                  >
-                    마이페이지 <b className="caret" />
-                  </a>
-                  <ul className="dropdown-menu">
-                    <li className="dropdown-item">
-                      <a href="my_campaigns.html" className="nav-link">
-                        내 캠페인
-                      </a>
-                    </li>
-                    <li className="dropdown-item">
-                      <a href="wishlist.html" className="nav-link">
-                        관심 캠페인/유투버
-                      </a>
-                    </li>
-                    <li className="dropdown-item">
-                      <a href="edit_account.html" className="nav-link">
-                        내 정보 수정
-                      </a>
-                    </li>
-                    <li className="dropdown-item">
-                      <a href="packages.html" className="nav-link">
-                        포인트 충전{" "}
-                      </a>
-                    </li>
-                  </ul>
-                </li>{" "}
               </ul>
             </div>
             <div id="search" className="collapse clearfix">

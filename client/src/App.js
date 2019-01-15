@@ -14,9 +14,11 @@ import Topbar from "./components/layout/Topbar";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
-import Register from "./components/auth/register/Register";
-import AdvertiserRegister from "./components/auth/register/AdvertiserRegister";
-import CreatorRegister from "./components/auth/register/CreatorRegister";
+import Register from "./components/auth/Register";
+import AdvertiserRegister from "./components/auth/advertiser/AdvertiserRegister";
+import AdvertiserEditAccount from "./components/auth/advertiser/AdvertiserEditAccount";
+import CreatorRegister from "./components/auth/creator/CreatorRegister";
+import CreatorEditAccount from "./components/auth/creator/CreatorEditAccount";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
@@ -28,6 +30,8 @@ import Profile from "./components/profile/Profile";
 import Posts from "./components/posts/Posts";
 import Post from "./components/post/Post";
 import NotFound from "./components/not-found/NotFound";
+import CreatorList from "./components/creator_list/CreatorList";
+import CampaignList from "./components/campaign_list/CampaignList";
 
 import "./App.css";
 
@@ -73,6 +77,34 @@ class App extends Component {
                 path="/register_creator"
                 component={CreatorRegister}
               />
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit_account_advertiser"
+                  component={AdvertiserEditAccount}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit_account_creator"
+                  component={CreatorEditAccount}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/creator_list"
+                  component={CreatorList}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/campaign_list"
+                  component={CampaignList}
+                />
+              </Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/profiles" component={Profiles} />
               <Route exact path="/profile/:handle" component={Profile} />

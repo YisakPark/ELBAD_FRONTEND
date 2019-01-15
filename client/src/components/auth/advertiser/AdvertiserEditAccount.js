@@ -2,12 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { registerUser } from "../../../actions/authActions";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import TextAreaFieldGroup from "../../common/TextAreaFieldGroup";
 import SelectFieldGroup from "../../common/SelectFieldGroup";
 
-class AdvertiserRegister extends Component {
+class EditAccount extends Component {
   constructor() {
     super();
     this.state = {
@@ -32,11 +31,7 @@ class AdvertiserRegister extends Component {
     this.onChange_img = this.onChange_img.bind(this);
   }
 
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/");
-    }
-  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
@@ -102,15 +97,15 @@ class AdvertiserRegister extends Component {
           <div className="container">
             <div className="row d-flex align-items-center flex-wrap">
               <div className="col-md-7">
-                <h1 className="h2">광고주 회원가입</h1>
+                <h1 className="h2">내 정보 수정</h1>
               </div>
               <div className="col-md-5">
                 <ul className="breadcrumb d-flex justify-content-end">
                   <li className="breadcrumb-item">
                     <a href="index.html">홈</a>
                   </li>
-                  <li className="breadcrumb-item active">회원가입</li>
-                  <li className="breadcrumb-item active">광고주 회원가입</li>
+                  <li className="breadcrumb-item active">마이페이지</li>
+                  <li className="breadcrumb-item active">내 정보 수정</li>
                 </ul>
               </div>
             </div>
@@ -121,10 +116,8 @@ class AdvertiserRegister extends Component {
             <div className="row justify-content-center">
               <div className="col-md-7">
                 <div className="box">
-                  <small className="d-block pb-3">* = 필수 기입 항목</small>
                   <form noValidate onSubmit={this.onSubmit}>
                     <TextFieldGroup
-                      label="*성명"
                       placeholder="성명"
                       name="name"
                       value={this.state.name}
@@ -133,7 +126,6 @@ class AdvertiserRegister extends Component {
                       id="register_name"
                     />
                     <TextFieldGroup
-                      label="*이메일"
                       placeholder="이메일"
                       name="email"
                       type="email"
@@ -143,7 +135,6 @@ class AdvertiserRegister extends Component {
                       id="register_email"
                     />
                     <TextFieldGroup
-                      label="*비밀번호"
                       placeholder="비밀번호"
                       name="password"
                       type="password"
@@ -153,7 +144,6 @@ class AdvertiserRegister extends Component {
                       id="register_password"
                     />
                     <TextFieldGroup
-                      label="*비밀번호확인"
                       placeholder="비밀번호확인"
                       name="password2"
                       type="password"
@@ -163,7 +153,6 @@ class AdvertiserRegister extends Component {
                       id="register_password2"
                     />
                     <TextFieldGroup
-                      label="*미팅가능지역"
                       placeholder="미팅가능지역"
                       name="meeting_region"
                       value={this.state.meeting_region}
@@ -172,7 +161,6 @@ class AdvertiserRegister extends Component {
                       id="register_meeting_region"
                     />
                     <TextFieldGroup
-                      label="*핸드폰번호"
                       placeholder="핸드폰번호"
                       name="cell_phone_number"
                       value={this.state.cell_phone_number}
@@ -181,7 +169,6 @@ class AdvertiserRegister extends Component {
                       id="register_cell_phone_number"
                     />
                     <TextFieldGroup
-                      label="*회사명"
                       placeholder="회사명"
                       name="company_name"
                       value={this.state.company_name}
@@ -190,7 +177,6 @@ class AdvertiserRegister extends Component {
                       id="register_company_name"
                     />
                     <TextAreaFieldGroup
-                      label="*회사 소개"
                       placeholder="회사 소개"
                       name="company_introduction"
                       value={this.state.company_introduction}
@@ -209,7 +195,7 @@ class AdvertiserRegister extends Component {
                       id="register_company_homepage"
                     />
                     <SelectFieldGroup
-                      label="*사업자 유형"
+                      label="사업자 유형"
                       name="company_type"
                       placeholder="사업자 유형을 선택하세요"
                       selected_value={this.state.company_type}
@@ -255,7 +241,7 @@ class AdvertiserRegister extends Component {
                         type="submit"
                         className="btn btn-template-outlined"
                       >
-                        <i className="fa fa-user-md" /> Register
+                        <i className="fa fa-user-md" /> 등록
                       </button>
                     </div>
                   </form>
@@ -269,8 +255,7 @@ class AdvertiserRegister extends Component {
   }
 }
 
-AdvertiserRegister.propTypes = {
-  registerUser: PropTypes.func.isRequired,
+EditAccount.propTypes = {
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -282,5 +267,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
-)(withRouter(AdvertiserRegister));
+  {}
+)(withRouter(EditAccount));
