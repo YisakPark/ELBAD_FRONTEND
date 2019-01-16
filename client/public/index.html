@@ -122,7 +122,7 @@
         .toISOString()
         .split("T")[0];
       var resultant_JSON = new Object();
-      function get_youtube_channel_detail() {
+      function get_youtube_channel_detail(jwtToken) {
         authenticate()
           .then(loadClient)
           .then(get_subscribers_views)
@@ -130,13 +130,19 @@
           .then(get_viewers_countries)
           .then(get_viewers_gender)
           .then(() => {
+            resultant_JSON["handle"] = "hello";
             // construct an HTTP request
             var xhr = new XMLHttpRequest();
-            xhr.open("post", "http://localhost:4000/api/users/test", true);
+            xhr.open(
+              "post",
+              "http://10.38.101.70:4000/api/profile/youtube_profile",
+              true
+            );
             xhr.setRequestHeader(
               "Content-Type",
               "application/json; charset=UTF-8"
             );
+            xhr.setRequestHeader("Authorization", jwtToken);
 
             // send the collected data as JSON
             xhr.send(JSON.stringify(resultant_JSON));
@@ -223,6 +229,7 @@
               resultant_JSON["country"] = new Object();
               var result_arr = response["result"]["rows"];
               var accumalated_percentage = 0;
+              var idx = 0;
               console.log("viewer percentage divided by country: ");
               for (var key in result_arr) {
                 if (key >= 10) {
@@ -235,9 +242,12 @@
                 }
                 var res = result_arr[key];
                 var view_percentage = (res[1] / total_views) * 100;
+                var str = res[0] + " " + view_percentage;
                 accumalated_percentage += view_percentage;
                 console.log(res[0] + ": " + view_percentage + "%");
-                resultant_JSON["country"][res[0]] = view_percentage;
+                console.log(str);
+                resultant_JSON["country"][idx] = str;
+                idx++;
               }
             },
             function(err) {

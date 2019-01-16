@@ -2,36 +2,34 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import TextFieldGroup from "../../common/TextFieldGroup";
-import TextAreaFieldGroup from "../../common/TextAreaFieldGroup";
-import SelectFieldGroup from "../../common/SelectFieldGroup";
+import { registerUser } from "../../actions/authActions";
+import TextFieldGroup from "../common/TextFieldGroup";
+import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 
-class EditAccount extends Component {
+class CreatorEditAccount extends Component {
   constructor() {
     super();
     this.state = {
       errors: {},
       imagePreviewUrl: "",
-      user_type: "advertiser",
+      user_type: "creator",
       email: "",
       name: "",
       password: "",
       password2: "",
       meeting_region: "",
       cell_phone_number: "",
-      company_name: "",
-      company_introduction: "",
-      company_homepage: "",
-      company_photo: "",
-      company_type: ""
+      creator_nickname: "",
+      creator_introduction: "",
+      creator_photo: "",
+      product_delivery_address: "",
+      product_delivery_recipient: ""
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange_img = this.onChange_img.bind(this);
   }
-
-  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
@@ -51,7 +49,7 @@ class EditAccount extends Component {
 
     reader.onloadend = () => {
       this.setState({
-        company_photo: file,
+        creator_photo: file,
         imagePreviewUrl: reader.result
       });
     };
@@ -72,11 +70,11 @@ class EditAccount extends Component {
       password2: this.state.password2,
       meeting_region: this.state.meeting_region,
       cell_phone_number: this.state.cell_phone_number,
-      company_name: this.state.company_name,
-      company_introduction: this.state.company_introduction,
-      company_homepage: this.state.company_homepage,
-      company_photo: this.state.company_photo,
-      company_type: this.state.company_type
+      creator_nickname: this.state.creator_nickname,
+      creator_introduction: this.state.creator_introduction,
+      creator_photo: this.state.company_photo,
+      product_delivery_address: this.state.product_delivery_address,
+      product_delivery_recipient: this.state.product_delivery_recipient
     };
 
     this.props.registerUser(newUser, this.props.history);
@@ -128,7 +126,6 @@ class EditAccount extends Component {
                     <TextFieldGroup
                       placeholder="이메일"
                       name="email"
-                      type="email"
                       value={this.state.email}
                       onChange={this.onChange}
                       error={errors.email}
@@ -169,48 +166,40 @@ class EditAccount extends Component {
                       id="register_cell_phone_number"
                     />
                     <TextFieldGroup
-                      placeholder="회사명"
-                      name="company_name"
-                      value={this.state.company_name}
+                      label="닉네임 (크리에이터로 활동시 사용하는 닉네임을 적어주세요)"
+                      placeholder="닉네임"
+                      name="creator_nickname"
+                      value={this.state.creator_nickname}
                       onChange={this.onChange}
-                      error={errors.company_name}
-                      id="register_company_name"
+                      error={errors.creator_nickname}
+                      id="register_creator_nick_name"
                     />
                     <TextAreaFieldGroup
-                      placeholder="회사 소개"
-                      name="company_introduction"
-                      value={this.state.company_introduction}
+                      placeholder="본인 소개"
+                      name="creator_introduction"
+                      value={this.state.creator_introduction}
                       onChange={this.onChange}
-                      error={errors.company_introduction}
-                      id="register_company_introduction"
+                      error={errors.creator_introduction}
+                      id="register_creator_introduction"
                     />
                     <TextFieldGroup
-                      label="회사 홈페이지"
-                      placeholder="회사 홈페이지"
-                      서
-                      name="company_homepage"
-                      value={this.state.company_homepage}
+                      placeholder="제품 배송 받을 주소"
+                      name="product_delivery_address"
+                      value={this.state.product_delivery_address}
                       onChange={this.onChange}
-                      error={errors.company_homepage}
-                      id="register_company_homepage"
+                      error={errors.product_delivery_address}
+                      id="register_product_delivery_address"
                     />
-                    <SelectFieldGroup
-                      label="사업자 유형"
-                      name="company_type"
-                      placeholder="사업자 유형을 선택하세요"
-                      selected_value={this.state.company_type}
-                      values={[
-                        "corporate_business",
-                        "individual_business",
-                        "free_lancer"
-                      ]}
-                      contents={["법인사업자", "개인사업자", "프리랜서"]}
+                    <TextFieldGroup
+                      placeholder="제품 배송 수령인"
+                      name="product_delivery_recipient"
+                      value={this.state.product_delivery_recipient}
                       onChange={this.onChange}
-                      error={errors.company_type}
-                      id="register_company_type"
+                      error={errors.product_delivery_recipient}
+                      id="register_product_delivery_recipient"
                     />
                     <div className="mb-4 form-group">
-                      <label htmlFor="register_company_photo">
+                      <label htmlFor="register_creator_photo">
                         프로필 사진
                       </label>
                       <div className="input-group mb-3">
@@ -218,7 +207,7 @@ class EditAccount extends Component {
                           <input
                             type="file"
                             className="custom-file-input"
-                            id="register_company_photo"
+                            id="register_creator_photo"
                             aria-describedby="inputGroupFileAddon01"
                             onChange={this.onChange_img}
                             accept="image/x-png,image/gif,image/jpeg"
@@ -241,7 +230,7 @@ class EditAccount extends Component {
                         type="submit"
                         className="btn btn-template-outlined"
                       >
-                        <i className="fa fa-user-md" /> 등록
+                        <i className="fa fa-user-md" /> 수정
                       </button>
                     </div>
                   </form>
@@ -255,7 +244,8 @@ class EditAccount extends Component {
   }
 }
 
-EditAccount.propTypes = {
+CreatorEditAccount.propTypes = {
+  registerUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -267,5 +257,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {}
-)(withRouter(EditAccount));
+  { registerUser }
+)(withRouter(CreatorEditAccount));

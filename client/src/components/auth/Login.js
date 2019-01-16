@@ -98,7 +98,7 @@ class Login extends Component {
                         type="submit"
                         className="btn btn-template-outlined"
                       >
-                        <i className="fa fa-user-md" /> Register
+                        <i className="fa fa-user-md" /> 로그인
                       </button>
                     </div>
                   </form>

@@ -8,7 +8,9 @@ import { clearCurrentProfile } from "./actions/profileActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import PrivateRoute from "./components/common/PrivateRoute";
+import { PrivateRoute } from "./components/common/PrivateRouteGroup";
+import { CreatorPrivateRoute } from "./components/common/PrivateRouteGroup";
+import { AdvertiserPrivateRoute } from "./components/common/PrivateRouteGroup";
 
 import Topbar from "./components/layout/Topbar";
 import Navbar from "./components/layout/Navbar";
@@ -16,10 +18,11 @@ import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import AdvertiserRegister from "./components/auth/advertiser/AdvertiserRegister";
-import AdvertiserEditAccount from "./components/auth/advertiser/AdvertiserEditAccount";
+import AdvertiserEditAccount from "./components/my_page/AdvertiserEditAccount";
 import CreatorRegister from "./components/auth/creator/CreatorRegister";
-import CreatorEditAccount from "./components/auth/creator/CreatorEditAccount";
+import CreatorEditAccount from "./components/my_page/CreatorEditAccount";
 import Login from "./components/auth/Login";
+import GetYoutubeChannel from "./components/my_page/GetYoutubeChannel";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
 import EditProfile from "./components/edit-profile/EditProfile";
@@ -78,72 +81,28 @@ class App extends Component {
                 component={CreatorRegister}
               />
               <Switch>
-                <PrivateRoute
+                <AdvertiserPrivateRoute
                   exact
                   path="/edit_account_advertiser"
                   component={AdvertiserEditAccount}
                 />
               </Switch>
               <Switch>
-                <PrivateRoute
+                <CreatorPrivateRoute
                   exact
                   path="/edit_account_creator"
                   component={CreatorEditAccount}
                 />
               </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/creator_list"
-                  component={CreatorList}
-                />
-              </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/campaign_list"
-                  component={CampaignList}
-                />
-              </Switch>
+              <Route exact path="/creator_list" component={CreatorList} />
+              <Route exact path="/campaign_list" component={CampaignList} />
               <Route exact path="/login" component={Login} />
-              <Route exact path="/profiles" component={Profiles} />
-              <Route exact path="/profile/:handle" component={Profile} />
               <Switch>
-                <PrivateRoute exact path="/dashboard" component={Dashboard} />
-              </Switch>
-              <Switch>
-                <PrivateRoute
+                <CreatorPrivateRoute
                   exact
-                  path="/create-profile"
-                  component={CreateProfile}
+                  path="/get_youtube_channel"
+                  component={GetYoutubeChannel}
                 />
-              </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/edit-profile"
-                  component={EditProfile}
-                />
-              </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/add-experience"
-                  component={AddExperience}
-                />
-              </Switch>
-              <Switch>
-                <PrivateRoute
-                  exact
-                  path="/add-education"
-                  component={AddEducation}
-                />
-              </Switch>
-              <Switch>
-                <PrivateRoute exact path="/feed" component={Posts} />
-              </Switch>
-              <Switch>
-                <PrivateRoute exact path="/post/:id" component={Post} />
               </Switch>
               <Route exact path="/not-found" component={NotFound} />
             </div>

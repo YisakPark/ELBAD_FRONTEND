@@ -28,12 +28,10 @@ class CreatorRegister extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onClick = this.onClick.bind(this);
     this.onChange_img = this.onChange_img.bind(this);
   }
 
   componentDidMount() {
-    window.gapi_load();
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/");
     }
@@ -89,11 +87,6 @@ class CreatorRegister extends Component {
     };
 
     this.props.registerUser(newUser, this.props.history);
-  }
-
-  onClick(e) {
-    e.preventDefault();
-    window.get_youtube_channel_detail();
   }
 
   render() {
@@ -252,16 +245,6 @@ class CreatorRegister extends Component {
                           {$imagePreview}
                         </div>
                       </div>
-                    </div>
-                    <div className="text-center mb-4">
-                      <button
-                        type="button"
-                        className="btn btn-info"
-                        onClick={this.onClick}
-                      >
-                        <i className="fa fa-youtube-play" /> 유투브 채널
-                        상세정보 불러들이기
-                      </button>
                     </div>
                     <div className="text-center">
                       <button

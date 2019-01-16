@@ -2,39 +2,36 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { registerUser } from "../../../actions/authActions";
-import TextFieldGroup from "../../common/TextFieldGroup";
-import TextAreaFieldGroup from "../../common/TextAreaFieldGroup";
+import TextFieldGroup from "../common/TextFieldGroup";
+import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
+import SelectFieldGroup from "../common/SelectFieldGroup";
 
-class CreatorEditAccount extends Component {
+class EditAccount extends Component {
   constructor() {
     super();
     this.state = {
       errors: {},
       imagePreviewUrl: "",
-      user_type: "creator",
+      user_type: "advertiser",
       email: "",
       name: "",
       password: "",
       password2: "",
       meeting_region: "",
       cell_phone_number: "",
-      creator_nickname: "",
-      creator_introduction: "",
-      creator_photo: "",
-      product_delivery_address: "",
-      product_delivery_recipient: ""
+      company_name: "",
+      company_introduction: "",
+      company_homepage: "",
+      company_photo: "",
+      company_type: ""
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onClick = this.onClick.bind(this);
     this.onChange_img = this.onChange_img.bind(this);
   }
 
-  componentDidMount() {
-    window.gapi_load();
-  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
@@ -54,7 +51,7 @@ class CreatorEditAccount extends Component {
 
     reader.onloadend = () => {
       this.setState({
-        creator_photo: file,
+        company_photo: file,
         imagePreviewUrl: reader.result
       });
     };
@@ -75,19 +72,14 @@ class CreatorEditAccount extends Component {
       password2: this.state.password2,
       meeting_region: this.state.meeting_region,
       cell_phone_number: this.state.cell_phone_number,
-      creator_nickname: this.state.creator_nickname,
-      creator_introduction: this.state.creator_introduction,
-      creator_photo: this.state.company_photo,
-      product_delivery_address: this.state.product_delivery_address,
-      product_delivery_recipient: this.state.product_delivery_recipient
+      company_name: this.state.company_name,
+      company_introduction: this.state.company_introduction,
+      company_homepage: this.state.company_homepage,
+      company_photo: this.state.company_photo,
+      company_type: this.state.company_type
     };
 
     this.props.registerUser(newUser, this.props.history);
-  }
-
-  onClick(e) {
-    e.preventDefault();
-    window.get_youtube_channel_detail();
   }
 
   render() {
@@ -136,6 +128,7 @@ class CreatorEditAccount extends Component {
                     <TextFieldGroup
                       placeholder="이메일"
                       name="email"
+                      type="email"
                       value={this.state.email}
                       onChange={this.onChange}
                       error={errors.email}
@@ -176,40 +169,48 @@ class CreatorEditAccount extends Component {
                       id="register_cell_phone_number"
                     />
                     <TextFieldGroup
-                      label="닉네임 (크리에이터로 활동시 사용하는 닉네임을 적어주세요)"
-                      placeholder="닉네임"
-                      name="creator_nickname"
-                      value={this.state.creator_nickname}
+                      placeholder="회사명"
+                      name="company_name"
+                      value={this.state.company_name}
                       onChange={this.onChange}
-                      error={errors.creator_nickname}
-                      id="register_creator_nick_name"
+                      error={errors.company_name}
+                      id="register_company_name"
                     />
                     <TextAreaFieldGroup
-                      placeholder="본인 소개"
-                      name="creator_introduction"
-                      value={this.state.creator_introduction}
+                      placeholder="회사 소개"
+                      name="company_introduction"
+                      value={this.state.company_introduction}
                       onChange={this.onChange}
-                      error={errors.creator_introduction}
-                      id="register_creator_introduction"
+                      error={errors.company_introduction}
+                      id="register_company_introduction"
                     />
                     <TextFieldGroup
-                      placeholder="제품 배송 받을 주소"
-                      name="product_delivery_address"
-                      value={this.state.product_delivery_address}
+                      label="회사 홈페이지"
+                      placeholder="회사 홈페이지"
+                      서
+                      name="company_homepage"
+                      value={this.state.company_homepage}
                       onChange={this.onChange}
-                      error={errors.product_delivery_address}
-                      id="register_product_delivery_address"
+                      error={errors.company_homepage}
+                      id="register_company_homepage"
                     />
-                    <TextFieldGroup
-                      placeholder="제품 배송 수령인"
-                      name="product_delivery_recipient"
-                      value={this.state.product_delivery_recipient}
+                    <SelectFieldGroup
+                      label="사업자 유형"
+                      name="company_type"
+                      placeholder="사업자 유형을 선택하세요"
+                      selected_value={this.state.company_type}
+                      values={[
+                        "corporate_business",
+                        "individual_business",
+                        "free_lancer"
+                      ]}
+                      contents={["법인사업자", "개인사업자", "프리랜서"]}
                       onChange={this.onChange}
-                      error={errors.product_delivery_recipient}
-                      id="register_product_delivery_recipient"
+                      error={errors.company_type}
+                      id="register_company_type"
                     />
                     <div className="mb-4 form-group">
-                      <label htmlFor="register_creator_photo">
+                      <label htmlFor="register_company_photo">
                         프로필 사진
                       </label>
                       <div className="input-group mb-3">
@@ -217,7 +218,7 @@ class CreatorEditAccount extends Component {
                           <input
                             type="file"
                             className="custom-file-input"
-                            id="register_creator_photo"
+                            id="register_company_photo"
                             aria-describedby="inputGroupFileAddon01"
                             onChange={this.onChange_img}
                             accept="image/x-png,image/gif,image/jpeg"
@@ -235,22 +236,12 @@ class CreatorEditAccount extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className="text-center mb-4">
-                      <button
-                        type="button"
-                        className="btn btn-info"
-                        onClick={this.onClick}
-                      >
-                        <i className="fa fa-youtube-play" /> 유투브 채널
-                        상세정보 불러들이기
-                      </button>
-                    </div>
                     <div className="text-center">
                       <button
                         type="submit"
                         className="btn btn-template-outlined"
                       >
-                        <i className="fa fa-user-md" /> 등록
+                        <i className="fa fa-user-md" /> 수정
                       </button>
                     </div>
                   </form>
@@ -264,8 +255,7 @@ class CreatorEditAccount extends Component {
   }
 }
 
-CreatorEditAccount.propTypes = {
-  registerUser: PropTypes.func.isRequired,
+EditAccount.propTypes = {
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -277,5 +267,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
-)(withRouter(CreatorEditAccount));
+  {}
+)(withRouter(EditAccount));

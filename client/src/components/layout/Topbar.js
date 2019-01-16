@@ -45,6 +45,14 @@ class Topbar extends Component {
           >
             내 정보 수정
           </Link>
+          {user.user_type === "creator" ? (
+            <Link
+              to="get_youtube_channel"
+              className="dropdown-item topbar_drop_down_item"
+            >
+              유투브 채널 정보 불러오기
+            </Link>
+          ) : null}
           <a href="#" className="dropdown-item topbar_drop_down_item">
             포인트 충전
           </a>
