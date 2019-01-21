@@ -2,18 +2,18 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { editUser, getUser } from "../../actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import SelectFieldGroup from "../common/SelectFieldGroup";
+import isEmpty from "../../validation/is-empty";
 
 class EditAccount extends Component {
   constructor() {
     super();
     this.state = {
       errors: {},
-      imagePreviewUrl: "",
       user_type: "advertiser",
-      email: "",
       name: "",
       password: "",
       password2: "",
@@ -23,7 +23,8 @@ class EditAccount extends Component {
       company_introduction: "",
       company_homepage: "",
       company_photo: "",
-      company_type: ""
+      company_type: "",
+      imagePreviewUrl: ""
     };
 
     this.onChange = this.onChange.bind(this);
@@ -31,11 +32,53 @@ class EditAccount extends Component {
     this.onChange_img = this.onChange_img.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.getUser();
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
+    }
+
+    if (nextProps.auth.profile) {
+      const profile = nextProps.auth.profile;
+
+      // If profile field doesnt exist, make empty string
+      profile.name = !isEmpty(profile.name) ? profile.name : "";
+      profile.meeting_region = !isEmpty(profile.meeting_region)
+        ? profile.meeting_region
+        : "";
+      profile.cell_phone_number = !isEmpty(profile.cell_phone_number)
+        ? profile.cell_phone_number
+        : "";
+      profile.company_name = !isEmpty(profile.company_name)
+        ? profile.company_name
+        : "";
+      profile.company_introduction = !isEmpty(profile.company_introduction)
+        ? profile.company_introduction
+        : "";
+      profile.company_hompage = !isEmpty(profile.company_hompage)
+        ? profile.company_hompage
+        : "";
+      profile.company_photo = !isEmpty(profile.company_photo)
+        ? profile.company_photo
+        : "";
+      profile.company_type = !isEmpty(profile.company_type)
+        ? profile.company_type
+        : "";
+
+      // Set component fields state
+      this.setState({
+        name: profile.name,
+        meeting_region: profile.meeting_region,
+        cell_phone_number: profile.cell_phone_number,
+        company_name: profile.company_name,
+        company_introduction: profile.company_introduction,
+        company_homepage: profile.company_homepage,
+        company_photo: profile.company_photo,
+        company_type: profile.company_type
+      });
     }
   }
 
@@ -62,11 +105,10 @@ class EditAccount extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-
+    console.log(this.props);
     const newUser = {
       user_type: this.state.user_type,
 
-      email: this.state.email,
       name: this.state.name,
       password: this.state.password,
       password2: this.state.password2,
@@ -79,7 +121,7 @@ class EditAccount extends Component {
       company_type: this.state.company_type
     };
 
-    this.props.registerUser(newUser, this.props.history);
+    this.props.editUser(newUser, this.props.history);
   }
 
   render() {
@@ -99,15 +141,6 @@ class EditAccount extends Component {
               <div className="col-md-7">
                 <h1 className="h2">내 정보 수정</h1>
               </div>
-              <div className="col-md-5">
-                <ul className="breadcrumb d-flex justify-content-end">
-                  <li className="breadcrumb-item">
-                    <a href="index.html">홈</a>
-                  </li>
-                  <li className="breadcrumb-item active">마이페이지</li>
-                  <li className="breadcrumb-item active">내 정보 수정</li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
@@ -124,15 +157,6 @@ class EditAccount extends Component {
                       onChange={this.onChange}
                       error={errors.name}
                       id="register_name"
-                    />
-                    <TextFieldGroup
-                      placeholder="이메일"
-                      name="email"
-                      type="email"
-                      value={this.state.email}
-                      onChange={this.onChange}
-                      error={errors.email}
-                      id="register_email"
                     />
                     <TextFieldGroup
                       placeholder="비밀번호"
@@ -267,5 +291,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {}
+  { editUser, getUser }
 )(withRouter(EditAccount));

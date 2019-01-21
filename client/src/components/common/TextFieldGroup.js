@@ -16,7 +16,7 @@ const TextFieldGroup = ({
 }) => {
   return (
     <div className="form-group">
-      <label htmlFor={id}>{label ? label : placeholder}</label>
+      {label && <label htmlFor={id}>{label ? label : placeholder}</label>}
       <input
         id={id}
         type={type}

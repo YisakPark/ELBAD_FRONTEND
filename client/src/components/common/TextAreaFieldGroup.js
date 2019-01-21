@@ -14,7 +14,7 @@ const TextAreaFieldGroup = ({
 }) => {
   return (
     <div className="form-group">
-      <label htmlFor={id}>{label ? label : placeholder}</label>
+      {label && <label htmlFor={id}>{label ? label : placeholder}</label>}
       <textarea
         id={id}
         className={classnames("form-control form-control-lg", {

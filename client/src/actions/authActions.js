@@ -1,11 +1,13 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
+import { clearErrors } from "./errorActions";
 
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, GET_CURRENT_USER } from "./types";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
+  dispatch(clearErrors());
   axios
     .post("http://10.38.101.70:4000/api/users/register", userData)
     .then(res => {
@@ -59,4 +61,38 @@ export const logoutUser = () => dispatch => {
   setAuthToken(false);
   // Set current user to {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
+};
+
+// Edit user info
+export const editUser = (userData, history) => dispatch => {
+  axios
+    .put("http://10.38.101.70:4000/api/users/edit_user", userData)
+    .then(res => {
+      history.push("/");
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      });
+    });
+};
+
+// Get user info
+export const getUser = () => dispatch => {
+  dispatch(clearErrors());
+  axios
+    .get("http://10.38.101.70:4000/api/users/current")
+    .then(res =>
+      dispatch({
+        type: GET_CURRENT_USER,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_CURRENT_USER,
+        payload: null
+      })
+    );
 };

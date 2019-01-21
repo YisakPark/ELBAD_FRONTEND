@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
+import { editUser, getUser } from "../../actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
+import isEmpty from "../../validation/is-empty";
 
 class CreatorEditAccount extends Component {
   constructor() {
@@ -13,7 +14,6 @@ class CreatorEditAccount extends Component {
       errors: {},
       imagePreviewUrl: "",
       user_type: "creator",
-      email: "",
       name: "",
       password: "",
       password2: "",
@@ -31,9 +31,57 @@ class CreatorEditAccount extends Component {
     this.onChange_img = this.onChange_img.bind(this);
   }
 
+  componentDidMount() {
+    this.props.getUser();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
+    }
+
+    if (nextProps.auth.profile) {
+      const profile = nextProps.auth.profile;
+
+      // If profile field doesnt exist, make empty string
+      profile.name = !isEmpty(profile.name) ? profile.name : "";
+      profile.meeting_region = !isEmpty(profile.meeting_region)
+        ? profile.meeting_region
+        : "";
+      profile.cell_phone_number = !isEmpty(profile.cell_phone_number)
+        ? profile.cell_phone_number
+        : "";
+      profile.creator_nickname = !isEmpty(profile.creator_nickname)
+        ? profile.creator_nickname
+        : "";
+      profile.creator_introduction = !isEmpty(profile.creator_introduction)
+        ? profile.creator_introduction
+        : "";
+      profile.creator_photo = !isEmpty(profile.creator_photo)
+        ? profile.creator_photo
+        : "";
+      profile.product_delivery_address = !isEmpty(
+        profile.product_delivery_address
+      )
+        ? profile.product_delivery_address
+        : "";
+      profile.product_delivery_recipient = !isEmpty(
+        profile.product_delivery_recipient
+      )
+        ? profile.product_delivery_recipient
+        : "";
+
+      // Set component fields state
+      this.setState({
+        name: profile.name,
+        meeting_region: profile.meeting_region,
+        cell_phone_number: profile.cell_phone_number,
+        creator_nickname: profile.creator_nickname,
+        creator_introduction: profile.creator_introduction,
+        creator_photo: profile.creator_photo,
+        product_delivery_address: profile.product_delivery_address,
+        product_delivery_recipient: profile.product_delivery_recipient
+      });
     }
   }
 
@@ -64,7 +112,6 @@ class CreatorEditAccount extends Component {
     const newUser = {
       user_type: this.state.user_type,
 
-      email: this.state.email,
       name: this.state.name,
       password: this.state.password,
       password2: this.state.password2,
@@ -77,7 +124,7 @@ class CreatorEditAccount extends Component {
       product_delivery_recipient: this.state.product_delivery_recipient
     };
 
-    this.props.registerUser(newUser, this.props.history);
+    this.props.editUser(newUser, this.props.history);
   }
 
   render() {
@@ -97,15 +144,6 @@ class CreatorEditAccount extends Component {
               <div className="col-md-7">
                 <h1 className="h2">내 정보 수정</h1>
               </div>
-              <div className="col-md-5">
-                <ul className="breadcrumb d-flex justify-content-end">
-                  <li className="breadcrumb-item">
-                    <a href="index.html">홈</a>
-                  </li>
-                  <li className="breadcrumb-item active">마이페이지</li>
-                  <li className="breadcrumb-item active">내 정보 수정</li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
@@ -122,14 +160,6 @@ class CreatorEditAccount extends Component {
                       onChange={this.onChange}
                       error={errors.name}
                       id="register_name"
-                    />
-                    <TextFieldGroup
-                      placeholder="이메일"
-                      name="email"
-                      value={this.state.email}
-                      onChange={this.onChange}
-                      error={errors.email}
-                      id="register_email"
                     />
                     <TextFieldGroup
                       placeholder="비밀번호"
@@ -257,5 +287,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { registerUser }
+  { editUser, getUser }
 )(withRouter(CreatorEditAccount));

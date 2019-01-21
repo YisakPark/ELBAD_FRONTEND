@@ -2,26 +2,25 @@ import React, { Component } from "react";
 
 class CampaignList extends Component {
   render() {
+    const searchStyle = {
+      marginTop: "12px"
+    };
+
     return (
       <div>
         <div id="heading-breadcrumbs">
           <div className="container">
-            <div className="row d-flex align-items-center flex-wrap">
+            <div className="row d-flex align-items-center flex-wrap middle_bar">
               <div className="col-md-7">
                 <h1 className="h2">캠페인 리스트</h1>
-              </div>
-              <div className="col-md-5">
-                <ul className="breadcrumb d-flex justify-content-end">
-                  <li className="breadcrumb-item">
-                    <a href="index.html">홈</a>
-                  </li>
-                  <li className="breadcrumb-item active">캠페인 리스트</li>
-                </ul>
               </div>
             </div>
           </div>
         </div>
-        <div class="container panel panel-default sidebar-menu">
+        <div
+          class="container panel panel-default sidebar-menu"
+          style={searchStyle}
+        >
           <div class="panel-heading">
             <h3 class="h4 panel-title">캠페인 찾기</h3>
           </div>

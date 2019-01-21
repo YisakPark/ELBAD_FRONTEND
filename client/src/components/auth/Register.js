@@ -15,17 +15,9 @@ class Register extends Component {
       <div>
         <div id="heading-breadcrumbs">
           <div className="container">
-            <div className="row d-flex align-items-center flex-wrap">
+            <div className="row d-flex align-items-center flex-wrap middle_bar">
               <div className="col-md-7">
                 <h1 className="h2">회원가입</h1>
-              </div>
-              <div className="col-md-5">
-                <ul className="breadcrumb d-flex justify-content-end">
-                  <li className="breadcrumb-item">
-                    <a href="index.html">홈</a>
-                  </li>
-                  <li className="breadcrumb-item active">회원가입</li>
-                </ul>
               </div>
             </div>
           </div>

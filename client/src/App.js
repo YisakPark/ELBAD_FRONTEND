@@ -97,13 +97,19 @@ class App extends Component {
               <Route exact path="/creator_list" component={CreatorList} />
               <Route exact path="/campaign_list" component={CampaignList} />
               <Route exact path="/login" component={Login} />
+              <Route
+                exact
+                path="/get_youtube_channel"
+                component={GetYoutubeChannel}
+              />
+              {/*
               <Switch>
                 <CreatorPrivateRoute
                   exact
                   path="/get_youtube_channel"
                   component={GetYoutubeChannel}
                 />
-              </Switch>
+</Switch> */}
               <Route exact path="/not-found" component={NotFound} />
             </div>
             <Footer />

@@ -92,29 +92,29 @@ class AdvertiserRegister extends Component {
 
   render() {
     const { errors } = this.state;
+    const photoStyle = {
+      height: "150px",
+      width: "auto",
+      maxWidth: "220px"
+    };
     let { imagePreviewUrl } = this.state;
     let $imagePreview = null;
     if (imagePreviewUrl)
       $imagePreview = (
-        <img src={imagePreviewUrl} className="img-thumbnail img-fluid" />
+        <img
+          style={photoStyle}
+          src={imagePreviewUrl}
+          className="img-thumbnail img-fluid"
+        />
       );
 
     return (
       <div>
         <div id="heading-breadcrumbs">
           <div className="container">
-            <div className="row d-flex align-items-center flex-wrap">
+            <div className="row d-flex align-items-center flex-wrap middle_bar">
               <div className="col-md-7">
                 <h1 className="h2">광고주 회원가입</h1>
-              </div>
-              <div className="col-md-5">
-                <ul className="breadcrumb d-flex justify-content-end">
-                  <li className="breadcrumb-item">
-                    <a href="index.html">홈</a>
-                  </li>
-                  <li className="breadcrumb-item active">회원가입</li>
-                  <li className="breadcrumb-item active">광고주 회원가입</li>
-                </ul>
               </div>
             </div>
           </div>

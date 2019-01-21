@@ -14,6 +14,22 @@ class Topbar extends Component {
   render() {
     const { isAuthenticated, user } = this.props.auth;
 
+    const guest_topbarStyle = {
+      height: "25px"
+    };
+
+    const guest_rowStyle = {
+      marginTop: "-8px"
+    };
+
+    const auth_topbarStyle = {
+      height: "30px"
+    };
+
+    const auth_rowStyle = {
+      marginTop: "-15px"
+    };
+
     const authLinks = (
       <div className="btn-group">
         <a
@@ -81,9 +97,15 @@ class Topbar extends Component {
     );
 
     return (
-      <div className="top-bar">
+      <div
+        className="top-bar"
+        style={isAuthenticated ? auth_topbarStyle : guest_topbarStyle}
+      >
         <div className="container">
-          <div className="row d-flex align-items-center">
+          <div
+            className="row d-flex align-items-center"
+            style={isAuthenticated ? auth_rowStyle : guest_rowStyle}
+          >
             <div className="col-md-6 d-md-block d-none">
               <p>Contact Information</p>
             </div>

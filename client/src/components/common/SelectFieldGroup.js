@@ -11,7 +11,6 @@ const SelectFieldGroup = ({
   error,
   info,
   onChange,
-  disabled,
   id,
   selected_value
 }) => {
@@ -22,19 +21,20 @@ const SelectFieldGroup = ({
 
   return (
     <div className="form-group">
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id}>{label}</label>}
       <select
         className={classnames("form-control", {
           "is-invalid": error
         })}
         name={name}
         onChange={onChange}
-        disabled={disabled}
         value={selected_value}
       >
-        <option value="" key="0">
-          {placeholder}
-        </option>
+        {placeholder && (
+          <option value="" key="0" defaultValue hidden>
+            {placeholder}
+          </option>
+        )}
         {values.map((value, index) => {
           return (
             <option value={value} key={index + 1}>
@@ -59,7 +59,6 @@ SelectFieldGroup.propTypes = {
   error: PropTypes.string,
   type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  disabled: PropTypes.string,
   id: PropTypes.string.isRequired,
   selected_value: PropTypes.string
 };
