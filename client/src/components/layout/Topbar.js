@@ -44,11 +44,19 @@ class Topbar extends Component {
             className="rounded-circle img-fluid topbar_profile_photo"
           />
         </a>
-        <div className="dropdown-menu">
-          <a href="#" className="dropdown-item topbar_drop_down_item">
+        <div className="dropdown-menu" style={{ padding: "0px" }}>
+          <a
+            href="#"
+            className="dropdown-item topbar_drop_down_item"
+            style={{ borderBottom: "1px solid #eee" }}
+          >
             내 캠페인
           </a>
-          <a href="#" className="dropdown-item topbar_drop_down_item">
+          <a
+            href="#"
+            className="dropdown-item topbar_drop_down_item"
+            style={{ borderBottom: "1px solid #eee" }}
+          >
             관심 캠페인/크리에이터
           </a>
           <Link
@@ -58,6 +66,7 @@ class Topbar extends Component {
                 : "edit_account_creator"
             }
             className="dropdown-item topbar_drop_down_item"
+            style={{ borderBottom: "1px solid #eee" }}
           >
             내 정보 수정
           </Link>
@@ -65,11 +74,16 @@ class Topbar extends Component {
             <Link
               to="get_youtube_channel"
               className="dropdown-item topbar_drop_down_item"
+              style={{ borderBottom: "1px solid #eee" }}
             >
               유투브 채널 정보 불러오기
             </Link>
           ) : null}
-          <a href="#" className="dropdown-item topbar_drop_down_item">
+          <a
+            href="#"
+            className="dropdown-item topbar_drop_down_item"
+            style={{ borderBottom: "1px solid #eee" }}
+          >
             포인트 충전
           </a>
           <a

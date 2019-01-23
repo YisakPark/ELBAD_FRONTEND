@@ -7,7 +7,7 @@ class CreatorList extends Component {
     super();
     this.state = {
       errors: {},
-      search_keyword: "",
+      search_nickname: "",
       subscribers: "",
       category: "",
       age_range: "",
@@ -27,7 +27,7 @@ class CreatorList extends Component {
     e.preventDefault();
 
     const search = {
-      search_keyword: this.state.search_keyword,
+      search_nickname: this.state.search_nickname,
       subscribers: this.state.subscribers,
       category: this.state.category,
       age_range: this.state.age_range,
@@ -77,16 +77,16 @@ class CreatorList extends Component {
                 <input
                   type="text"
                   className={classnames("form-control", {
-                    "is-invalid": errors.search_keyword
+                    "is-invalid": errors.search_nickname
                   })}
-                  placeholder="키워드 검색"
-                  name="search_keyword"
-                  value={this.state.search_keyword}
+                  placeholder="크리에이터 닉네임 검색"
+                  name="search_nickname"
+                  value={this.state.search_nickname}
                   onChange={this.onChange}
                 />
-                {errors.search_keyword && (
+                {errors.search_nickname && (
                   <div className="invalid-feedback">
-                    {errors.search_keyword}
+                    {errors.search_nickname}
                   </div>
                 )}
                 <span className="input-group-btn">

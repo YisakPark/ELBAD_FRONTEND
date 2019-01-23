@@ -71,7 +71,6 @@ class CreatorRegister extends Component {
     e.preventDefault();
 
     this.setState({ next: !this.state.next });
-    console.log(this.state.next);
   }
 
   onChange(e) {
@@ -103,7 +102,24 @@ class CreatorRegister extends Component {
       this.state.cell_phone_number1 +
       this.state.cell_phone_number2 +
       this.state.cell_phone_number3;
-    console.log(email);
+    const formData = new FormData();
+
+    formData.append("user_type", this.state.user_type);
+    formData.append("email", email);
+    formData.append("name", this.state.name);
+    formData.append("password", this.state.password);
+    formData.append("password2", this.state.password2);
+    formData.append("meeting_region", this.state.meeting_region);
+    formData.append("cell_phone_number", cell_phone_number);
+    formData.append("creator_nickname", this.state.creator_nickname);
+    formData.append("creator_introduction", this.state.creator_introduction);
+    formData.append("creator_photo", this.state.creator_photo);
+    formData.append(
+      "product_delivery_address",
+      this.state.product_delivery_address
+    );
+    formData.append("product_delivery_recipient", this.state.name);
+
     const newUser = {
       user_type: this.state.user_type,
       email: email,
@@ -119,7 +135,7 @@ class CreatorRegister extends Component {
       product_delivery_recipient: this.state.name
     };
 
-    this.props.registerUser(newUser, this.props.history);
+    this.props.registerUser(formData, this.props.history);
   }
 
   render() {

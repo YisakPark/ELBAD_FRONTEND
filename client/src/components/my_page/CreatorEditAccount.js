@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { editUser, getUser } from "../../actions/authActions";
+import { editUser, getUser, getPhoto } from "../../actions/authActions";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import isEmpty from "../../validation/is-empty";
@@ -23,7 +23,9 @@ class CreatorEditAccount extends Component {
       creator_introduction: "",
       creator_photo: "",
       product_delivery_address: "",
-      product_delivery_recipient: ""
+      product_delivery_recipient: "",
+      photo_base64: "",
+      photo: ""
     };
 
     this.onChange = this.onChange.bind(this);
@@ -32,7 +34,8 @@ class CreatorEditAccount extends Component {
   }
 
   componentDidMount() {
-    this.props.getUser();
+    //this.props.getUser();
+    this.props.getPhoto();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,6 +43,16 @@ class CreatorEditAccount extends Component {
       this.setState({ errors: nextProps.errors });
     }
 
+    if (nextProps.auth.profile) {
+      const profile = nextProps.auth.profile;
+
+      this.setState({ creator_photo: profile });
+
+      /*      this.setState({
+        photo: profile.photo
+      })
+ */
+      /*
     if (nextProps.auth.profile) {
       const profile = nextProps.auth.profile;
 
@@ -82,6 +95,7 @@ class CreatorEditAccount extends Component {
         product_delivery_address: profile.product_delivery_address,
         product_delivery_recipient: profile.product_delivery_recipient
       });
+      */
     }
   }
 
@@ -152,6 +166,12 @@ class CreatorEditAccount extends Component {
             <div className="row justify-content-center">
               <div className="col-md-7">
                 <div className="box">
+                  {/*<img
+                    src={`data:image/jpeg;base64,${this.state.creator_photo}`}
+                  />*/}
+                  <img src="http://localhost:4000/api/posts/getPhoto/demo.jpg" />
+                  <img src="http://localhost:4000/api/posts/getPhoto/demo2.jpg" />
+
                   <form noValidate onSubmit={this.onSubmit}>
                     <TextFieldGroup
                       placeholder="성명"
@@ -275,7 +295,8 @@ class CreatorEditAccount extends Component {
 }
 
 CreatorEditAccount.propTypes = {
-  registerUser: PropTypes.func.isRequired,
+  editUser: PropTypes.func.isRequired,
+  getUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -287,5 +308,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { editUser, getUser }
+  { editUser, getUser, getPhoto }
 )(withRouter(CreatorEditAccount));

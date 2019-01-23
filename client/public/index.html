@@ -122,6 +122,12 @@
         .toISOString()
         .split("T")[0];
       var resultant_JSON = new Object();
+
+      /*
+      window.onbeforeunload = function() {
+        localStorage.removeItem("jwtToken");
+      };*/
+
       function get_youtube_channel_detail(jwtToken) {
         authenticate()
           .then(loadClient)
@@ -286,7 +292,8 @@
             apiKey: "AIzaSyDR-OmGt0fMTgV4IEK_ddcw9GT3PIVT5O8",
             clientId:
               "335340556270-gpcf439i9nvoe07mkue8a2rmtd7dft0h.apps.googleusercontent.com",
-            scope: "https://www.googleapis.com/auth/yt-analytics.readonly"
+            scope:
+              "https://www.googleapis.com/auth/yt-analytics.readonly https://www.googleapis.com/auth/youtube"
           });
         });
       }

@@ -8,6 +8,12 @@ import { GET_ERRORS, SET_CURRENT_USER, GET_CURRENT_USER } from "./types";
 // Register User
 export const registerUser = (userData, history) => dispatch => {
   dispatch(clearErrors());
+  console.log(userData);
+  const config = {
+    headers: {
+      "content-type": "form-data"
+    }
+  };
   axios
     .post("http://10.38.101.70:4000/api/users/register", userData)
     .then(res => {
@@ -88,6 +94,34 @@ export const getUser = () => dispatch => {
         type: GET_CURRENT_USER,
         payload: res.data
       })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_CURRENT_USER,
+        payload: null
+      })
+    );
+};
+
+export const getPhoto = () => dispatch => {
+  dispatch(clearErrors());
+  axios
+    .get("http://localhost:4000/api/posts/getPhoto", {
+      responseType: "arraybuffer"
+    })
+    .then(
+      res => {
+        const a = new Buffer(res.data, "binary").toString("base64");
+        dispatch({
+          type: GET_CURRENT_USER,
+          payload: a
+        });
+      }
+      /*      dispatch({
+        type: GET_CURRENT_USER,
+        payload: res.data
+      })
+      */
     )
     .catch(err =>
       dispatch({
