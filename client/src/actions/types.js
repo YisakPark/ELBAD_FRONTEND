@@ -12,3 +12,4 @@ export const GET_POST = "GET_POST";
 export const ADD_POST = "ADD_POST";
 export const DELETE_POST = "DELETE_POST";
 export const GET_CURRENT_USER = "GET_CURRENT_USER";
+export const GET_CREATOR_LIST = "GET_CREATOR_LIST";

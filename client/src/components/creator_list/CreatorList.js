@@ -1,22 +1,37 @@
 import React, { Component } from "react";
-import TextFieldGroup from "../common/TextFieldGroup";
 import classnames from "classnames";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { getCreatorList } from "../../actions/profileActions";
+import MiddleBar from "../common/MiddleBar";
 
 class CreatorList extends Component {
   constructor() {
     super();
     this.state = {
       errors: {},
+      creator_list: [],
       search_nickname: "",
-      subscribers: "",
-      category: "",
-      age_range: "",
-      monthly_views: "",
-      views_per_video: ""
+      search_subscribers: "",
+      search_category: "",
+      search_age_range: "",
+      search_monthly_views: "",
+      search_views_per_video: ""
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.getCreatorList();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.profile.creator_list.users) {
+      this.setState({ creator_list: nextProps.profile.creator_list.users });
+    }
   }
 
   onChange(e) {
@@ -27,12 +42,13 @@ class CreatorList extends Component {
     e.preventDefault();
 
     const search = {
+      creator_list: {},
       search_nickname: this.state.search_nickname,
-      subscribers: this.state.subscribers,
-      category: this.state.category,
-      age_range: this.state.age_range,
-      monthly_views: this.state.monthly_views,
-      views_per_video: this.state.views_per_video
+      search_subscribers: this.state.search_subscribers,
+      search_category: this.state.search_category,
+      search_age_range: this.state.search_age_range,
+      search_monthly_views: this.state.search_monthly_views,
+      search_views_per_video: this.state.search_views_per_video
     };
 
     console.log(search);
@@ -55,15 +71,7 @@ class CreatorList extends Component {
 
     return (
       <div>
-        <div id="heading-breadcrumbs">
-          <div className="container">
-            <div className="row d-flex align-items-center flex-wrap middle_bar">
-              <div className="col-md-7">
-                <h1 className="h2">크리에이터 리스트</h1>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MiddleBar content="크리에이터 리스트" />
         <div
           className="container panel panel-default sidebar-menu"
           style={searchStyle}
@@ -98,9 +106,9 @@ class CreatorList extends Component {
               <div className="input-group mt-4">
                 <select
                   className="form-control col-md-2"
-                  name="subscribers"
+                  name="search_subscribers"
                   onChange={this.onChange}
-                  value={this.state.subscribers}
+                  value={this.state.search_subscribers}
                 >
                   <option value="" key="0" defaultValue hidden>
                     구독자 수
@@ -127,9 +135,9 @@ class CreatorList extends Component {
 
                 <select
                   className="form-control col-md-2 ml-2"
-                  name="category"
+                  name="search_category"
                   onChange={this.onChange}
-                  value={this.state.category}
+                  value={this.state.search_category}
                 >
                   <option value="" key="0" defaultValue hidden>
                     카테고리
@@ -140,7 +148,7 @@ class CreatorList extends Component {
                   className="form-control col-md-3 ml-2"
                   name="age"
                   onChange={this.onChange}
-                  value={this.state.age_range}
+                  value={this.state.search_age_range}
                 >
                   <option value="" key="0" defaultValue hidden>
                     주요 시청 연령대
@@ -150,17 +158,18 @@ class CreatorList extends Component {
                   className="form-control col-md-3 ml-2"
                   name="age"
                   onChange={this.onChange}
-                  value={this.state.monthly_views}
+                  value={this.state.search_monthly_views}
                 >
                   <option value="" key="0" defaultValue hidden>
                     월간 평균 조회수
                   </option>
+                  creator_list: {},{" "}
                 </select>
                 <select
                   className="form-control col-md-3 ml-2"
                   name="age"
                   onChange={this.onChange}
-                  value={this.state.views_per_video}
+                  value={this.state.search_views_per_video}
                 >
                   <option value="" key="0" defaultValue hidden>
                     게시물 당 평균 조회수
@@ -176,206 +185,43 @@ class CreatorList extends Component {
               <div className="col-md-12">
                 <div className="products-big">
                   <div className="row products">
-                    <div className="col-lg-3 col-md-4">
-                      <div className="product">
-                        <div className="image">
-                          <a href="shop-detail.html">
-                            <img
-                              src="img/product1.jpg"
-                              alt=""
-                              className="img-fluid image1"
-                            />
-                          </a>
-                        </div>
-                        <div className="text">
-                          <h3 className="h5">
-                            <a href="shop-detail.html" style={titleStyle}>
-                              크리에이터 1
+                    {this.state.creator_list.map((creator, i) => (
+                      <div className="col-lg-3 col-md-4" key={i}>
+                        <div className="product">
+                          <div
+                            className="image"
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center"
+                            }}
+                          >
+                            <a href="shop-detail.html">
+                              <img
+                                src={
+                                  "http://10.38.101.70:4000/api/users/getPhoto/" +
+                                  creator.photo
+                                }
+                                alt=""
+                                className="img-fluid image1"
+                              />
                             </a>
-                          </h3>
-                          <p className="price" style={contentStyle}>
-                            게임 전문 크리에이터 <br />
-                            누적 조회수: 100만 <br />
-                            1회 광고시 희망 광고비: 30만원
-                          </p>
+                          </div>
+                          <div className="text">
+                            <h3 className="h5">
+                              <a href="shop-detail.html" style={titleStyle}>
+                                {creator.name}
+                              </a>
+                            </h3>
+                            <p className="price" style={contentStyle}>
+                              게임 전문 크리에이터 <br />
+                              누적 조회수: 100만 <br />
+                              1회 광고시 희망 광고비: 30만원
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4">
-                      <div className="product">
-                        <div className="image">
-                          <a href="shop-detail.html">
-                            <img
-                              src="img/product2.jpg"
-                              alt=""
-                              className="img-fluid image1"
-                            />
-                          </a>
-                        </div>
-                        <div className="text">
-                          <h3 className="h5">
-                            <a href="shop-detail.html" style={titleStyle}>
-                              크리에이터 2
-                            </a>
-                          </h3>
-                          <p className="price" style={contentStyle}>
-                            게임 전문 크리에이터 <br />
-                            누적 조회수: 100만 <br />
-                            1회 광고시 희망 광고비: 30만원
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4">
-                      <div className="product">
-                        <div className="image">
-                          <a href="shop-detail.html">
-                            <img
-                              src="img/product3.jpg"
-                              alt=""
-                              className="img-fluid image1"
-                            />
-                          </a>
-                        </div>
-                        <div className="text">
-                          <h3 className="h5">
-                            <a href="shop-detail.html" style={titleStyle}>
-                              크리에이터 3
-                            </a>
-                          </h3>
-                          <p className="price" style={contentStyle}>
-                            게임 전문 크리에이터 <br />
-                            누적 조회수: 100만 <br />
-                            1회 광고시 희망 광고비: 30만원
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4">
-                      <div className="product">
-                        <div className="image">
-                          <a href="shop-detail.html">
-                            <img
-                              src="img/product4.jpg"
-                              alt=""
-                              className="img-fluid image1"
-                            />
-                          </a>
-                        </div>
-                        <div className="text">
-                          <h3 className="h5">
-                            <a href="shop-detail.html" style={titleStyle}>
-                              크리에이터 4
-                            </a>
-                          </h3>
-                          <p className="price" style={contentStyle}>
-                            게임 전문 크리에이터 <br />
-                            누적 조회수: 100만 <br />
-                            1회 광고시 희망 광고비: 30만원
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4">
-                      <div className="product">
-                        <div className="image">
-                          <a href="shop-detail.html">
-                            <img
-                              src="img/product3.jpg"
-                              alt=""
-                              className="img-fluid image1"
-                            />
-                          </a>
-                        </div>
-                        <div className="text">
-                          <h3 className="h5">
-                            <a href="shop-detail.html" style={titleStyle}>
-                              크리에이터 5
-                            </a>
-                          </h3>
-                          <p className="price" style={contentStyle}>
-                            게임 전문 크리에이터 <br />
-                            누적 조회수: 100만 <br />
-                            1회 광고시 희망 광고비: 30만원
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4">
-                      <div className="product">
-                        <div className="image">
-                          <a href="shop-detail.html">
-                            <img
-                              src="img/product4.jpg"
-                              alt=""
-                              className="img-fluid image1"
-                            />
-                          </a>
-                        </div>
-                        <div className="text">
-                          <h3 className="h5">
-                            <a href="shop-detail.html" style={titleStyle}>
-                              크리에이터 6
-                            </a>
-                          </h3>
-                          <p className="price" style={contentStyle}>
-                            게임 전문 크리에이터 <br />
-                            누적 조회수: 100만 <br />
-                            1회 광고시 희망 광고비: 30만원
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4">
-                      <div className="product">
-                        <div className="image">
-                          <a href="shop-detail.html">
-                            <img
-                              src="img/product2.jpg"
-                              alt=""
-                              className="img-fluid image1"
-                            />
-                          </a>
-                        </div>
-                        <div className="text">
-                          <h3 className="h5">
-                            <a href="shop-detail.html" style={titleStyle}>
-                              크리에이터 7
-                            </a>
-                          </h3>
-                          <p className="price" style={contentStyle}>
-                            게임 전문 크리에이터 <br />
-                            누적 조회수: 100만 <br />
-                            1회 광고시 희망 광고비: 30만원
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-lg-3 col-md-4">
-                      <div className="product">
-                        <div className="image">
-                          <a href="shop-detail.html">
-                            <img
-                              src="img/product1.jpg"
-                              alt=""
-                              className="img-fluid image1"
-                            />
-                          </a>
-                        </div>
-                        <div className="text">
-                          <h3 className="h5">
-                            <a href="shop-detail.html" style={titleStyle}>
-                              크리에이터 8
-                            </a>
-                          </h3>
-                          <p className="price" style={contentStyle}>
-                            게임 전문 크리에이터 <br />
-                            누적 조회수: 100만 <br />
-                            1회 광고시 희망 광고비: 30만원
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
                 <div className="pages">
@@ -431,4 +277,20 @@ class CreatorList extends Component {
   }
 }
 
-export default CreatorList;
+CreatorList.propTypes = {
+  getCreatorList: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors,
+  profile: state.profile
+});
+
+export default connect(
+  mapStateToProps,
+  { getCreatorList }
+)(withRouter(CreatorList));

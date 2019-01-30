@@ -9,11 +9,7 @@ import { GET_ERRORS, SET_CURRENT_USER, GET_CURRENT_USER } from "./types";
 export const registerUser = (userData, history) => dispatch => {
   dispatch(clearErrors());
   console.log(userData);
-  const config = {
-    headers: {
-      "content-type": "form-data"
-    }
-  };
+  //    .post("http://10.38.101.70:4000/api/users/register", userData)
   axios
     .post("http://10.38.101.70:4000/api/users/register", userData)
     .then(res => {
@@ -127,6 +123,21 @@ export const getPhoto = () => dispatch => {
       dispatch({
         type: GET_CURRENT_USER,
         payload: null
+      })
+    );
+};
+
+// Login - Get User Token
+export const verifyEmail = (code, history) => dispatch => {
+  axios
+    .post("http://10.38.101.70:4000/api/users/verification", code)
+    .then(res => {
+      dispatch(setCurrentUser(res.data));
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
       })
     );
 };

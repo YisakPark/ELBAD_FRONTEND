@@ -32,3 +32,8 @@
   padding-top: 3px;
   padding-left: 6px;
 }
+
+.btn-info_blue {
+  background-color: #3f54f5;
+  border-color: #3f54f5;
+}

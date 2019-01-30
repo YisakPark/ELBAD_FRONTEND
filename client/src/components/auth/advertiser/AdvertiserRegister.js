@@ -6,20 +6,27 @@ import { registerUser } from "../../../actions/authActions";
 import TextFieldGroup from "../../common/TextFieldGroup";
 import TextAreaFieldGroup from "../../common/TextAreaFieldGroup";
 import SelectFieldGroup from "../../common/SelectFieldGroup";
+import MiddleBar from "../../common/MiddleBar";
+import classnames from "classnames";
 
 class AdvertiserRegister extends Component {
   constructor() {
     super();
     this.state = {
+      next: false,
       errors: {},
       imagePreviewUrl: "",
       user_type: "advertiser",
-      email: "",
+      address: "",
+      email_id: "",
+      email_address: "",
       name: "",
       password: "",
       password2: "",
       meeting_region: "",
-      cell_phone_number: "",
+      cell_phone_number1: "",
+      cell_phone_number2: "",
+      cell_phone_number3: "",
       company_name: "",
       company_introduction: "",
       company_homepage: "",
@@ -30,6 +37,9 @@ class AdvertiserRegister extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange_img = this.onChange_img.bind(this);
+    this.handleNextClick = this.handleNextClick.bind(this);
+    this.showFileUpload = this.showFileUpload.bind(this);
+    this.fileUpload = React.createRef();
   }
 
   componentDidMount() {
@@ -47,6 +57,16 @@ class AdvertiserRegister extends Component {
     }
   }
 
+  showFileUpload() {
+    this.fileUpload.current.click();
+  }
+
+  handleNextClick(e) {
+    e.preventDefault();
+
+    this.setState({ next: !this.state.next });
+  }
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -59,7 +79,7 @@ class AdvertiserRegister extends Component {
 
     reader.onloadend = () => {
       this.setState({
-        company_photo: file,
+        photo: file,
         imagePreviewUrl: reader.result
       });
     };
@@ -71,195 +91,363 @@ class AdvertiserRegister extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const newUser = {
-      user_type: this.state.user_type,
+    const email = this.state.email_id + "@" + this.state.email_address;
+    const cell_phone_number =
+      this.state.cell_phone_number1 +
+      this.state.cell_phone_number2 +
+      this.state.cell_phone_number3;
+    const formData = new FormData();
 
-      email: this.state.email,
-      name: this.state.name,
-      password: this.state.password,
-      password2: this.state.password2,
-      meeting_region: this.state.meeting_region,
-      cell_phone_number: this.state.cell_phone_number,
-      company_name: this.state.company_name,
-      company_introduction: this.state.company_introduction,
-      company_homepage: this.state.company_homepage,
-      company_photo: this.state.company_photo,
-      company_type: this.state.company_type
-    };
+    formData.append("user_type", this.state.user_type);
+    formData.append("email", email);
+    formData.append("name", this.state.name);
+    formData.append("address", this.state.address);
+    formData.append("password", this.state.password);
+    formData.append("password2", this.state.password2);
+    formData.append("meeting_region", this.state.meeting_region);
+    formData.append("cell_phone_number", cell_phone_number);
+    formData.append("company_name", this.state.company_name);
+    formData.append("company_type", this.state.company_type);
+    formData.append("photo", this.state.photo);
+    formData.append("company_introduction", this.state.company_introduction);
 
-    this.props.registerUser(newUser, this.props.history);
+    this.props.registerUser(formData, this.props.history);
   }
 
   render() {
-    const { errors } = this.state;
-    const photoStyle = {
-      height: "150px",
-      width: "auto",
-      maxWidth: "220px"
+    const { errors, next } = this.state;
+    const { imagePreviewUrl } = this.state;
+    const select_field = {
+      values: ["corporate_business", "individual_business", "free_lancer"],
+      contents: ["법인사업자", "개인사업자", "프리랜서"]
     };
-    let { imagePreviewUrl } = this.state;
-    let $imagePreview = null;
-    if (imagePreviewUrl)
+    let $imagePreview = (
+      <img
+        style={{ height: "195px", width: "200px" }}
+        className="img-thumbnail img-fluid"
+      />
+    );
+    if (imagePreviewUrl) {
       $imagePreview = (
         <img
-          style={photoStyle}
+          style={{ maxWidth: "200px" }}
           src={imagePreviewUrl}
           className="img-thumbnail img-fluid"
         />
       );
+    }
 
     return (
       <div>
-        <div id="heading-breadcrumbs">
-          <div className="container">
-            <div className="row d-flex align-items-center flex-wrap middle_bar">
-              <div className="col-md-7">
-                <h1 className="h2">광고주 회원가입</h1>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MiddleBar content="광고주 회원가입" />
         <div id="content">
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-md-7">
-                <div className="box">
-                  <small className="d-block pb-3">* = 필수 기입 항목</small>
-                  <form noValidate onSubmit={this.onSubmit}>
-                    <TextFieldGroup
-                      label="*성명"
-                      placeholder="성명"
-                      name="name"
-                      value={this.state.name}
-                      onChange={this.onChange}
-                      error={errors.name}
-                      id="register_name"
-                    />
-                    <TextFieldGroup
-                      label="*이메일"
-                      placeholder="이메일"
-                      name="email"
-                      type="email"
-                      value={this.state.email}
-                      onChange={this.onChange}
-                      error={errors.email}
-                      id="register_email"
-                    />
-                    <TextFieldGroup
-                      label="*비밀번호"
-                      placeholder="비밀번호"
-                      name="password"
-                      type="password"
-                      value={this.state.password}
-                      onChange={this.onChange}
-                      error={errors.password}
-                      id="register_password"
-                    />
-                    <TextFieldGroup
-                      label="*비밀번호확인"
-                      placeholder="비밀번호확인"
-                      name="password2"
-                      type="password"
-                      value={this.state.password2}
-                      onChange={this.onChange}
-                      error={errors.password2}
-                      id="register_password2"
-                    />
-                    <TextFieldGroup
-                      label="*미팅가능지역"
-                      placeholder="미팅가능지역"
-                      name="meeting_region"
-                      value={this.state.meeting_region}
-                      onChange={this.onChange}
-                      error={errors.meeting_region}
-                      id="register_meeting_region"
-                    />
-                    <TextFieldGroup
-                      label="*핸드폰번호"
-                      placeholder="핸드폰번호"
-                      name="cell_phone_number"
-                      value={this.state.cell_phone_number}
-                      onChange={this.onChange}
-                      error={errors.cell_phone_number}
-                      id="register_cell_phone_number"
-                    />
-                    <TextFieldGroup
-                      label="*회사명"
-                      placeholder="회사명"
-                      name="company_name"
-                      value={this.state.company_name}
-                      onChange={this.onChange}
-                      error={errors.company_name}
-                      id="register_company_name"
-                    />
-                    <TextAreaFieldGroup
-                      label="*회사 소개"
-                      placeholder="회사 소개"
-                      name="company_introduction"
-                      value={this.state.company_introduction}
-                      onChange={this.onChange}
-                      error={errors.company_introduction}
-                      id="register_company_introduction"
-                    />
-                    <TextFieldGroup
-                      label="회사 홈페이지"
-                      placeholder="회사 홈페이지"
-                      서
-                      name="company_homepage"
-                      value={this.state.company_homepage}
-                      onChange={this.onChange}
-                      error={errors.company_homepage}
-                      id="register_company_homepage"
-                    />
-                    <SelectFieldGroup
-                      label="*사업자 유형"
-                      name="company_type"
-                      placeholder="사업자 유형을 선택하세요"
-                      selected_value={this.state.company_type}
-                      values={[
-                        "corporate_business",
-                        "individual_business",
-                        "free_lancer"
-                      ]}
-                      contents={["법인사업자", "개인사업자", "프리랜서"]}
-                      onChange={this.onChange}
-                      error={errors.company_type}
-                      id="register_company_type"
-                    />
-                    <div className="mb-4 form-group">
-                      <label htmlFor="register_company_photo">
-                        프로필 사진
-                      </label>
-                      <div className="input-group mb-3">
-                        <div className="custom-file mr-2">
+                <div className="mt-5">
+                  <form
+                    noValidate
+                    onSubmit={this.onSubmit}
+                    style={{ marginTop: "80px" }}
+                  >
+                    {!next && (
+                      <div>
+                        <div className="form-group">
                           <input
-                            type="file"
-                            className="custom-file-input"
-                            id="register_company_photo"
-                            aria-describedby="inputGroupFileAddon01"
-                            onChange={this.onChange_img}
-                            accept="image/x-png,image/gif,image/jpeg"
+                            type="text"
+                            className={classnames("form-control", {
+                              "is-invalid": errors.name
+                            })}
+                            placeholder="성명"
+                            name="name"
+                            value={this.state.name}
+                            onChange={this.onChange}
                           />
-                          <label
-                            className="custom-file-label"
-                            htmlFor="inputGroupFile01"
-                          >
-                            사진을 선택하세요
-                          </label>
+                          {errors.name && (
+                            <div className="invalid_message">{errors.name}</div>
+                          )}
                         </div>
-                        <div>
-                          {/* div for image preview */}
-                          {$imagePreview}
+                        <div className="form-group form-inline mt-5">
+                          <input
+                            type="text"
+                            className={classnames("form-control col-md-5", {
+                              "is-invalid": errors.email
+                            })}
+                            placeholder="이메일"
+                            name="email_id"
+                            value={this.state.email_id}
+                            onChange={this.onChange}
+                          />
+                          <p
+                            className="col-md-1 text-center"
+                            style={{ marginTop: "15px" }}
+                          >
+                            @
+                          </p>
+                          <input
+                            type="text"
+                            className={classnames("form-control col-md-6", {
+                              "is-invalid": errors.email
+                            })}
+                            name="email_address"
+                            value={this.state.email_address}
+                            onChange={this.onChange}
+                          />
+                          {errors.email && (
+                            <div className="invalid_message">
+                              {errors.email}
+                            </div>
+                          )}
+                        </div>
+                        <div className="form-group">
+                          <input
+                            type="text"
+                            className={classnames("form-control mt-5", {
+                              "is-invalid": errors.address
+                            })}
+                            placeholder="주소"
+                            name="address"
+                            value={this.state.address}
+                            onChange={this.onChange}
+                          />
+                          {errors.address && (
+                            <div className="invalid_message">
+                              {errors.address}
+                            </div>
+                          )}
+                        </div>
+                        <div className="form-group form-inline mt-5">
+                          <input
+                            type="text"
+                            className={classnames("form-control col-md-2", {
+                              "is-invalid": errors.cell_phone_number
+                            })}
+                            placeholder="휴대폰"
+                            name="cell_phone_number1"
+                            value={this.state.cell_phone_number1}
+                            onChange={this.onChange}
+                          />
+                          <p
+                            className="col-md-1 text-center"
+                            style={{ marginTop: "15px" }}
+                          >
+                            -
+                          </p>
+                          <input
+                            type="text"
+                            className={classnames("form-control col-md-4", {
+                              "is-invalid": errors.cell_phone_number
+                            })}
+                            name="cell_phone_number2"
+                            value={this.state.cell_phone_number2}
+                            onChange={this.onChange}
+                          />
+                          <p
+                            className="col-md-1 text-center"
+                            style={{ marginTop: "15px" }}
+                          >
+                            -
+                          </p>
+                          <input
+                            type="text"
+                            className={classnames("form-control  col-md-4", {
+                              "is-invalid": errors.cell_phone_number
+                            })}
+                            name="cell_phone_number3"
+                            value={this.state.cell_phone_number3}
+                            onChange={this.onChange}
+                          />
+                          {errors.cell_phone_number && (
+                            <div className="invalid_message">
+                              {errors.cell_phone_number}
+                            </div>
+                          )}
+                        </div>
+                        <div className="form-group form-inline mt-5">
+                          <div className="col-md-6">
+                            <div className="row">
+                              <input
+                                type="password"
+                                className={classnames(
+                                  "form-control col-md-11",
+                                  {
+                                    "is-invalid": errors.password
+                                  }
+                                )}
+                                placeholder="비밀번호"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.onChange}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="row">
+                              <input
+                                type="password"
+                                className={classnames(
+                                  "form-control col-md-11 offset-md-1",
+                                  {
+                                    "is-invalid": errors.password2
+                                  }
+                                )}
+                                placeholder="비밀번호확인"
+                                name="password2"
+                                value={this.state.password2}
+                                onChange={this.onChange}
+                              />
+                            </div>
+                          </div>
+                          {errors.password && (
+                            <div className="invalid_message">
+                              {errors.password}
+                            </div>
+                          )}
+                          {errors.password2 && (
+                            <div className="invalid_message">
+                              {errors.password2}
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                    <div className="text-center">
+                    )}
+                    {next && (
+                      <div>
+                        <div className="row">
+                          <div className="col-md-4">
+                            <div className="row text-center">
+                              <div className="col-md-12">{$imagePreview}</div>
+                              <div className="col-md-12">
+                                <input
+                                  type="file"
+                                  onChange={this.onChange_img}
+                                  accept="image/x-png,image/gif,image/jpeg"
+                                  ref={this.fileUpload}
+                                  className="d-none"
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-template-outlined"
+                                  style={{ marginTop: "30px" }}
+                                  onClick={this.showFileUpload}
+                                >
+                                  사진 업로드
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-md-8">
+                            <div className="row">
+                              <div className="col-md-12">
+                                <div className="form-group">
+                                  <input
+                                    type="text"
+                                    className={classnames("form-control", {
+                                      "is-invalid": errors.company_name
+                                    })}
+                                    placeholder="회사명"
+                                    name="company_name"
+                                    value={this.state.company_name}
+                                    onChange={this.onChange}
+                                  />
+                                  {errors.company_name && (
+                                    <div className="invalid_message">
+                                      {errors.company_name}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="col-md-12 mt-4">
+                                <div className="form-group">
+                                  <input
+                                    type="text"
+                                    className={classnames("form-control", {
+                                      "is-invalid": errors.meeting_region
+                                    })}
+                                    placeholder="미팅 가능 지역"
+                                    name="meeting_region"
+                                    value={this.state.meeting_region}
+                                    onChange={this.onChange}
+                                  />
+                                  {errors.meeting_region && (
+                                    <div className="invalid_message">
+                                      {errors.meeting_region}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="col-md-12 mt-4">
+                                <div className="form-group">
+                                  <select
+                                    className={classnames("form-control", {
+                                      "is-invalid": errors.company_type
+                                    })}
+                                    name="company_type"
+                                    onChange={this.onChange}
+                                    value={this.state.company_type}
+                                  >
+                                    <option
+                                      value=""
+                                      key="0"
+                                      defaultValue
+                                      hidden
+                                    >
+                                      사업자 유형을 선택하세요
+                                    </option>
+                                    {select_field.values.map((value, index) => {
+                                      return (
+                                        <option value={value} key={index + 1}>
+                                          {select_field.contents[index]}
+                                        </option>
+                                      );
+                                    })}
+                                  </select>
+                                  {errors.company_type && (
+                                    <div className="invalid-feedback">
+                                      {errors.company_type}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="col-md-12 mt-4">
+                                <div className="form-group">
+                                  <textarea
+                                    className={classnames("form-control", {
+                                      "is-invalid": errors.company_introduction
+                                    })}
+                                    placeholder="회사소개"
+                                    name="company_introduction"
+                                    value={this.state.company_introduction}
+                                    onChange={this.onChange}
+                                  />
+                                  {errors.company_introduction && (
+                                    <div className="invalid-feedback">
+                                      {errors.company_introduction}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <div className="mt-5">
                       <button
-                        type="submit"
-                        className="btn btn-template-outlined"
+                        className="btn btn-info float-left"
+                        onClick={this.handleNextClick}
                       >
-                        <i className="fa fa-user-md" /> 등록
+                        {next ? "이전" : "다음"}
                       </button>
+
+                      {next ? (
+                        <button
+                          type="submit"
+                          className="btn btn-template-outlined float-right"
+                        >
+                          <i className="fa fa-user-md" /> 등록
+                        </button>
+                      ) : null}
                     </div>
                   </form>
                 </div>

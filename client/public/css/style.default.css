@@ -3191,13 +3191,13 @@ body {
 }
 
 a {
-  color: #4fbfa8;
+  color: #6c757d;
   text-decoration: none;
 }
 
 a:focus,
 a:hover {
-  color: #348e7b;
+  color: #212529;
   text-decoration: underline;
 }
 

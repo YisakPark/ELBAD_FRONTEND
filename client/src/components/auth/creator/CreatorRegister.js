@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "../../../actions/authActions";
-import TextFieldGroup from "../../common/TextFieldGroup";
-import TextAreaFieldGroup from "../../common/TextAreaFieldGroup";
+import MiddleBar from "../../common/MiddleBar";
 import classnames from "classnames";
 
 class CreatorRegister extends Component {
@@ -26,7 +25,7 @@ class CreatorRegister extends Component {
       cell_phone_number3: "",
       creator_nickname: "",
       creator_introduction: "",
-      creator_photo: "",
+      photo: "",
       product_delivery_address: "",
       product_delivery_recipient: ""
     };
@@ -85,7 +84,7 @@ class CreatorRegister extends Component {
 
     reader.onloadend = () => {
       this.setState({
-        creator_photo: file,
+        photo: file,
         imagePreviewUrl: reader.result
       });
     };
@@ -113,27 +112,12 @@ class CreatorRegister extends Component {
     formData.append("cell_phone_number", cell_phone_number);
     formData.append("creator_nickname", this.state.creator_nickname);
     formData.append("creator_introduction", this.state.creator_introduction);
-    formData.append("creator_photo", this.state.creator_photo);
+    formData.append("photo", this.state.photo);
     formData.append(
       "product_delivery_address",
       this.state.product_delivery_address
     );
     formData.append("product_delivery_recipient", this.state.name);
-
-    const newUser = {
-      user_type: this.state.user_type,
-      email: email,
-      name: this.state.name,
-      password: this.state.password,
-      password2: this.state.password2,
-      meeting_region: this.state.meeting_region,
-      cell_phone_number: cell_phone_number,
-      creator_nickname: this.state.creator_nickname,
-      creator_introduction: this.state.creator_introduction,
-      creator_photo: this.state.creator_photo,
-      product_delivery_address: this.state.product_delivery_address,
-      product_delivery_recipient: this.state.name
-    };
 
     this.props.registerUser(formData, this.props.history);
   }
@@ -159,15 +143,7 @@ class CreatorRegister extends Component {
 
     return (
       <div>
-        <div id="heading-breadcrumbs">
-          <div className="container">
-            <div className="row d-flex align-items-center flex-wrap middle_bar">
-              <div className="col-md-7">
-                <h1 className="h2">크리에이터 회원가입</h1>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MiddleBar content="크리에이터 회원가입" />
         <div id="content">
           <div className="container">
             <div className="row justify-content-center">

@@ -4,6 +4,8 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import TextFieldGroup from "../common/TextFieldGroup";
 import { loginUser } from "../../actions/authActions";
+import classnames from "classnames";
+import MiddleBar from "../common/MiddleBar";
 
 class Login extends Component {
   constructor() {
@@ -53,39 +55,48 @@ class Login extends Component {
 
     return (
       <div>
-        <div id="heading-breadcrumbs">
-          <div className="container">
-            <div className="row d-flex align-items-center flex-wrap middle_bar">
-              <div className="col-md-7">
-                <h1 className="h2">로그인</h1>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MiddleBar content="로그인" />
         <div id="content">
           <div className="container">
             <div className="row justify-content-center">
               <div className="col-md-7">
                 <div className="box">
                   <form noValidate onSubmit={this.onSubmit}>
-                    <TextFieldGroup
-                      placeholder="이메일"
-                      name="email"
-                      value={this.state.email}
-                      onChange={this.onChange}
-                      error={errors.email}
-                      id="login_email"
-                    />
-                    <TextFieldGroup
-                      placeholder="비밀번호"
-                      name="password"
-                      type="password"
-                      value={this.state.password}
-                      onChange={this.onChange}
-                      error={errors.password}
-                      id="login_password"
-                    />
-                    <div className="text-center">
+                    <div className="form-group">
+                      <input
+                        id="login_email"
+                        type="text"
+                        className={classnames("form-control", {
+                          "is-invalid": errors.email
+                        })}
+                        placeholder="이메일"
+                        name="email"
+                        value={this.state.email}
+                        onChange={this.onChange}
+                      />
+                      {errors.email && (
+                        <div className="invalid-feedback">{errors.email}</div>
+                      )}
+                    </div>
+                    <div className="form-group mt-5">
+                      <input
+                        id="login_password"
+                        type="password"
+                        className={classnames("form-control", {
+                          "is-invalid": errors.password
+                        })}
+                        placeholder="비밀번호"
+                        name="password"
+                        value={this.state.password}
+                        onChange={this.onChange}
+                      />
+                      {errors.password && (
+                        <div className="invalid-feedback">
+                          {errors.password}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-center mt-5">
                       <button
                         type="submit"
                         className="btn btn-template-outlined"

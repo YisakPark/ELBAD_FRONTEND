@@ -137,7 +137,7 @@ class EditAccount extends Component {
       <div>
         <div id="heading-breadcrumbs">
           <div className="container">
-            <div className="row d-flex align-items-center flex-wrap">
+            <div className="row d-flex align-items-center flex-wrap middle_bar">
               <div className="col-md-7">
                 <h1 className="h2">내 정보 수정</h1>
               </div>

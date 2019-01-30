@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import sampleProfileImage from "../../img/download.jpeg";
 
 class Topbar extends Component {
   onLogoutClick(e) {
@@ -23,7 +22,7 @@ class Topbar extends Component {
     };
 
     const auth_topbarStyle = {
-      height: "30px"
+      height: "35px"
     };
 
     const auth_rowStyle = {
@@ -39,9 +38,10 @@ class Topbar extends Component {
           aria-expanded="false"
         >
           <img
-            src={sampleProfileImage}
+            src={"http://10.38.101.70:4000/api/users/getPhoto/" + user.photo}
             alt=""
             className="rounded-circle img-fluid topbar_profile_photo"
+            style={{ width: "25px", maxHeight: "25px" }}
           />
         </a>
         <div className="dropdown-menu" style={{ padding: "0px" }}>
@@ -77,6 +77,15 @@ class Topbar extends Component {
               style={{ borderBottom: "1px solid #eee" }}
             >
               유투브 채널 정보 불러오기
+            </Link>
+          ) : null}
+          {user.user_type === "advertiser" ? (
+            <Link
+              to="create_campaign"
+              className="dropdown-item topbar_drop_down_item"
+              style={{ borderBottom: "1px solid #eee" }}
+            >
+              캠페인 만들기
             </Link>
           ) : null}
           <a

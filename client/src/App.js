@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
-import { clearCurrentProfile } from "./actions/profileActions";
+//import { clearCurrentProfile } from "./actions/profileActions";
 
 import { Provider } from "react-redux";
 import store from "./store";
 
-import { PrivateRoute } from "./components/common/PrivateRouteGroup";
+//import { PrivateRoute } from "./components/common/PrivateRouteGroup";
 import { CreatorPrivateRoute } from "./components/common/PrivateRouteGroup";
 import { AdvertiserPrivateRoute } from "./components/common/PrivateRouteGroup";
 
@@ -23,18 +23,20 @@ import CreatorRegister from "./components/auth/creator/CreatorRegister";
 import CreatorEditAccount from "./components/my_page/CreatorEditAccount";
 import Login from "./components/auth/Login";
 import GetYoutubeChannel from "./components/my_page/GetYoutubeChannel";
-import Dashboard from "./components/dashboard/Dashboard";
-import CreateProfile from "./components/create-profile/CreateProfile";
-import EditProfile from "./components/edit-profile/EditProfile";
-import AddExperience from "./components/add-credentials/AddExperience";
-import AddEducation from "./components/add-credentials/AddEducation";
-import Profiles from "./components/profiles/Profiles";
-import Profile from "./components/profile/Profile";
-import Posts from "./components/posts/Posts";
-import Post from "./components/post/Post";
+//import Dashboard from "./components/dashboard/Dashboard";
+//import CreateProfile from "./components/create-profile/CreateProfile";
+//import EditProfile from "./components/edit-profile/EditProfile";
+//import AddExperience from "./components/add-credentials/AddExperience";
+//import AddEducation from "./components/add-credentials/AddEducation";
+//import Profiles from "./components/profiles/Profiles";
+//import Profile from "./components/profile/Profile";
+//import Posts from "./components/posts/Posts";
+//import Post from "./components/post/Post";
 import NotFound from "./components/not-found/NotFound";
 import CreatorList from "./components/creator_list/CreatorList";
 import CampaignList from "./components/campaign_list/CampaignList";
+import CreateCampaign from "./components/my_page/CreateCampaign";
+import EmailVerification from "./components/auth/EmailVerification";
 
 import "./App.css";
 
@@ -94,14 +96,29 @@ class App extends Component {
                   component={CreatorEditAccount}
                 />
               </Switch>
+              <Switch>
+                <AdvertiserPrivateRoute
+                  exact
+                  path="/create_campaign"
+                  component={CreateCampaign}
+                />
+              </Switch>
+              <Switch>
+                <AdvertiserPrivateRoute
+                  exact
+                  path="/get_youtube_channel"
+                  component={GetYoutubeChannel}
+                />
+              </Switch>
               <Route exact path="/creator_list" component={CreatorList} />
               <Route exact path="/campaign_list" component={CampaignList} />
               <Route exact path="/login" component={Login} />
               <Route
                 exact
-                path="/get_youtube_channel"
-                component={GetYoutubeChannel}
+                path="/email_verification"
+                component={EmailVerification}
               />
+
               {/*
               <Switch>
                 <CreatorPrivateRoute

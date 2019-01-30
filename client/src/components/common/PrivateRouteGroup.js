@@ -19,26 +19,34 @@ const _PrivateRoute = ({ component: Component, auth, ...rest }) => (
 const _CreatorPrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
-      auth.isAuthenticated === true && auth.user.user_type === "creator" ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to="/login" />
-      )
-    }
+    render={props => {
+      if (auth.isAuthenticated === false) {
+        return <Redirect to="/login" />;
+      } else {
+        if (auth.user.user_type === "creator") {
+          return <Component {...props} />;
+        } else {
+          return <Redirect to="/" />;
+        }
+      }
+    }}
   />
 );
 
 const _AdvertiserPrivateRoute = ({ component: Component, auth, ...rest }) => (
   <Route
     {...rest}
-    render={props =>
-      auth.isAuthenticated === true && auth.user.user_type === "advertiser" ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to="/login" />
-      )
-    }
+    render={props => {
+      if (auth.isAuthenticated === false) {
+        return <Redirect to="/login" />;
+      } else {
+        if (auth.user.user_type === "advertiser") {
+          return <Component {...props} />;
+        } else {
+          return <Redirect to="/" />;
+        }
+      }
+    }}
   />
 );
 

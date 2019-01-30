@@ -22,11 +22,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.get("/getPhoto/:name", (req, res) => {
-  res.sendFile("/home/elba/Desktop/ELBAD/files/" + req.params.name);
+router.get("/getPhoto/:user_type/:name", (req, res) => {
+  console.log(req.params.user_type);
+  console.log(req.params.name);
+  //  res.sendFile("/home/elba/Desktop/ELBAD/files/" + req.params.name);
 });
 
-router.post("/files", upload.single("creator_photo"), (req, res) => {
+router.post("/files", upload.single("photo"), (req, res) => {
   const file = req.file; // file passed from client
   const meta = req.body; // all other values passed from the client, like name, etc..
   console.log(file);

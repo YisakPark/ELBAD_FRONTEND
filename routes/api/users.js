@@ -13,6 +13,8 @@ const validateLoginInput = require("../../validation/login");
 // Load User model
 const User = require("../../models/User");
 
+let rand;
+
 // @route   GET api/users/test
 // @desc    Tests users route
 // @access  Public
@@ -134,5 +136,19 @@ router.get(
     });
   }
 );
+
+// @route   GET api/users/current
+// @desc    Return current user
+// @access  Private
+router.get("/a", (req, res) => {
+  rand = Math.floor(Math.random() * 100 + 54);
+  console.log(rand);
+  return res.status(400).json(rand);
+});
+
+router.get("/b", (req, res) => {
+  console.log(rand);
+  return res.status(400).json(rand);
+});
 
 module.exports = router;

@@ -33,26 +33,13 @@ class CreatorEditAccount extends Component {
     this.onChange_img = this.onChange_img.bind(this);
   }
 
-  componentDidMount() {
-    //this.props.getUser();
-    this.props.getPhoto();
-  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
 
-    if (nextProps.auth.profile) {
-      const profile = nextProps.auth.profile;
-
-      this.setState({ creator_photo: profile });
-
-      /*      this.setState({
-        photo: profile.photo
-      })
- */
-      /*
     if (nextProps.auth.profile) {
       const profile = nextProps.auth.profile;
 
@@ -95,7 +82,6 @@ class CreatorEditAccount extends Component {
         product_delivery_address: profile.product_delivery_address,
         product_delivery_recipient: profile.product_delivery_recipient
       });
-      */
     }
   }
 
@@ -154,7 +140,7 @@ class CreatorEditAccount extends Component {
       <div>
         <div id="heading-breadcrumbs">
           <div className="container">
-            <div className="row d-flex align-items-center flex-wrap">
+            <div className="row d-flex align-items-center flex-wrap middle_bar">
               <div className="col-md-7">
                 <h1 className="h2">내 정보 수정</h1>
               </div>
@@ -166,9 +152,6 @@ class CreatorEditAccount extends Component {
             <div className="row justify-content-center">
               <div className="col-md-7">
                 <div className="box">
-                  {/*<img
-                    src={`data:image/jpeg;base64,${this.state.creator_photo}`}
-                  />*/}
                   <img src="http://localhost:4000/api/posts/getPhoto/demo.jpg" />
                   <img src="http://localhost:4000/api/posts/getPhoto/demo2.jpg" />
 

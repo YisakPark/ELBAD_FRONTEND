@@ -2,8 +2,9 @@ import {
   GET_PROFILE,
   GET_PROFILES,
   PROFILE_LOADING,
-  CLEAR_CURRENT_PROFILE
-} from '../actions/types';
+  CLEAR_CURRENT_PROFILE,
+  GET_CREATOR_LIST
+} from "../actions/types";
 
 const initialState = {
   profile: null,
@@ -34,6 +35,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         profile: null
+      };
+    case GET_CREATOR_LIST:
+      return {
+        ...state,
+        creator_list: action.payload
       };
     default:
       return state;

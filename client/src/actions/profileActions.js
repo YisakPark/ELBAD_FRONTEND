@@ -1,14 +1,26 @@
 import axios from "axios";
 
 import {
-  GET_PROFILE,
-  GET_PROFILES,
+  GET_CREATOR_LIST,
   PROFILE_LOADING,
-  CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
   SET_CURRENT_USER
 } from "./types";
 
+//Get creator list
+export const getCreatorList = () => dispatch => {
+  axios
+    .get("http://10.38.101.70:4000/api/profile/getCreatorList")
+    .then(res => {
+      dispatch({
+        type: GET_CREATOR_LIST,
+        payload: res.data
+      });
+    })
+    .catch(err => dispatch({}));
+};
+
+/*
 // Get current profile
 export const getCurrentProfile = () => dispatch => {
   dispatch(setProfileLoading());
@@ -173,4 +185,4 @@ export const clearCurrentProfile = () => {
   return {
     type: CLEAR_CURRENT_PROFILE
   };
-};
+};*/
