@@ -24,7 +24,8 @@ const _CreatorPrivateRoute = ({ component: Component, auth, ...rest }) => (
         return <Redirect to="/login" />;
       } else {
         if (auth.user.user_type === "creator") {
-          return <Component {...props} />;
+          if (auth.user.verified) return <Component {...props} />;
+          else return <Redirect to="/email_verification" />;
         } else {
           return <Redirect to="/" />;
         }
@@ -41,7 +42,8 @@ const _AdvertiserPrivateRoute = ({ component: Component, auth, ...rest }) => (
         return <Redirect to="/login" />;
       } else {
         if (auth.user.user_type === "advertiser") {
-          return <Component {...props} />;
+          if (auth.user.verified) return <Component {...props} />;
+          else return <Redirect to="/email_verification" />;
         } else {
           return <Redirect to="/" />;
         }

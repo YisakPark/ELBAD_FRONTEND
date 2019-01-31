@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { getCreatorList } from "../../actions/profileActions";
 import MiddleBar from "../common/MiddleBar";
+import BackEndServerAddress from "../common/BackEndServerAddress";
 
 class CreatorList extends Component {
   constructor() {
@@ -199,7 +200,8 @@ class CreatorList extends Component {
                             <a href="shop-detail.html">
                               <img
                                 src={
-                                  "http://10.38.101.70:4000/api/users/getPhoto/" +
+                                  BackEndServerAddress +
+                                  "/api/users/getPhoto/" +
                                   creator.photo
                                 }
                                 alt=""

@@ -5,6 +5,13 @@ import { connect } from "react-redux";
 import { registerUser } from "../../../actions/authActions";
 import MiddleBar from "../../common/MiddleBar";
 import classnames from "classnames";
+import isEmpty from "../../../validation/is-empty";
+import {
+  select_field_company_type,
+  select_field_region,
+  select_field_birthday,
+  select_field_creator_category
+} from "../../common/SelectFieldValuesContents";
 
 class CreatorRegister extends Component {
   constructor() {
@@ -17,8 +24,12 @@ class CreatorRegister extends Component {
       email_id: "",
       email_address: "",
       name: "",
+      birth_year: "",
+      birth_month: "",
+      birth_date: "",
       password: "",
       password2: "",
+      category: "",
       meeting_region: "",
       cell_phone_number1: "",
       cell_phone_number2: "",
@@ -101,16 +112,28 @@ class CreatorRegister extends Component {
       this.state.cell_phone_number1 +
       this.state.cell_phone_number2 +
       this.state.cell_phone_number3;
+    const birthday =
+      isEmpty(this.state.birth_year) ||
+      isEmpty(this.state.birth_month) ||
+      isEmpty(this.state.birth_date)
+        ? ""
+        : this.state.birth_year +
+          "." +
+          this.state.birth_month +
+          "." +
+          this.state.birth_date;
     const formData = new FormData();
 
     formData.append("user_type", this.state.user_type);
     formData.append("email", email);
     formData.append("name", this.state.name);
+    formData.append("birthday", this.state.birthday);
     formData.append("password", this.state.password);
     formData.append("password2", this.state.password2);
     formData.append("meeting_region", this.state.meeting_region);
     formData.append("cell_phone_number", cell_phone_number);
     formData.append("creator_nickname", this.state.creator_nickname);
+    formData.append("category", this.state.category);
     formData.append("creator_introduction", this.state.creator_introduction);
     formData.append("photo", this.state.photo);
     formData.append(
@@ -127,7 +150,7 @@ class CreatorRegister extends Component {
     const { imagePreviewUrl } = this.state;
     let $imagePreview = (
       <img
-        style={{ height: "150px", width: "200px" }}
+        style={{ height: "195px", width: "200px" }}
         className="img-thumbnail img-fluid"
       />
     );
@@ -268,6 +291,97 @@ class CreatorRegister extends Component {
                           )}
                         </div>
                         <div className="form-group form-inline mt-5">
+                          <select
+                            className={classnames("form-control col-md-4", {
+                              "is-invalid": errors.birthday
+                            })}
+                            name="birth_year"
+                            onChange={this.onChange}
+                            value={this.state.birth_year}
+                          >
+                            <option value="" key="0" defaultValue hidden>
+                              출생년도
+                            </option>
+                            {select_field_birthday.year.values.map(
+                              (value, index) => {
+                                return (
+                                  <option value={value} key={index + 1}>
+                                    {select_field_birthday.year.contents[index]}
+                                  </option>
+                                );
+                              }
+                            )}
+                          </select>
+
+                          <p
+                            className="col-md-1 text-center"
+                            style={{ marginTop: "15px" }}
+                          >
+                            -
+                          </p>
+
+                          <select
+                            className={classnames("form-control col-md-3", {
+                              "is-invalid": errors.birthday
+                            })}
+                            name="birth_month"
+                            onChange={this.onChange}
+                            value={this.state.birth_month}
+                          >
+                            <option value="" key="0" defaultValue hidden>
+                              월
+                            </option>
+                            {select_field_birthday.month.values.map(
+                              (value, index) => {
+                                return (
+                                  <option value={value} key={index + 1}>
+                                    {
+                                      select_field_birthday.month.contents[
+                                        index
+                                      ]
+                                    }
+                                  </option>
+                                );
+                              }
+                            )}
+                          </select>
+
+                          <p
+                            className="col-md-1 text-center"
+                            style={{ marginTop: "15px" }}
+                          >
+                            -
+                          </p>
+
+                          <select
+                            className={classnames("form-control col-md-3", {
+                              "is-invalid": errors.birthday
+                            })}
+                            name="birth_date"
+                            onChange={this.onChange}
+                            value={this.state.birth_date}
+                          >
+                            <option value="" key="0" defaultValue hidden>
+                              일
+                            </option>
+                            {select_field_birthday.date.values.map(
+                              (value, index) => {
+                                return (
+                                  <option value={value} key={index + 1}>
+                                    {select_field_birthday.date.contents[index]}
+                                  </option>
+                                );
+                              }
+                            )}
+                          </select>
+
+                          {errors.birthday && (
+                            <div className="invalid_message">
+                              {errors.birthday}
+                            </div>
+                          )}
+                        </div>
+                        <div className="form-group form-inline mt-5">
                           <div className="col-md-6">
                             <div className="row">
                               <input
@@ -363,18 +477,76 @@ class CreatorRegister extends Component {
                               </div>
                               <div className="col-md-12 mt-4">
                                 <div className="form-group">
-                                  <input
-                                    type="text"
+                                  <select
+                                    className={classnames("form-control", {
+                                      "is-invalid": errors.category
+                                    })}
+                                    name="category"
+                                    onChange={this.onChange}
+                                    value={this.state.category}
+                                  >
+                                    <option
+                                      value=""
+                                      key="0"
+                                      defaultValue
+                                      hidden
+                                    >
+                                      채널 카테고리
+                                    </option>
+                                    {select_field_creator_category.values.map(
+                                      (value, index) => {
+                                        return (
+                                          <option value={value} key={index + 1}>
+                                            {
+                                              select_field_creator_category
+                                                .contents[index]
+                                            }
+                                          </option>
+                                        );
+                                      }
+                                    )}
+                                  </select>
+                                  {errors.category && (
+                                    <div className="invalid-feedback">
+                                      {errors.category}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="col-md-12 mt-4">
+                                <div className="form-group">
+                                  <select
                                     className={classnames("form-control", {
                                       "is-invalid": errors.meeting_region
                                     })}
-                                    placeholder="미팅 가능 지역"
                                     name="meeting_region"
-                                    value={this.state.meeting_region}
                                     onChange={this.onChange}
-                                  />
+                                    value={this.state.meeting_region}
+                                  >
+                                    <option
+                                      value=""
+                                      key="0"
+                                      defaultValue
+                                      hidden
+                                    >
+                                      미팅 가능 지역
+                                    </option>
+                                    {select_field_region.values.map(
+                                      (value, index) => {
+                                        return (
+                                          <option value={value} key={index + 1}>
+                                            {
+                                              select_field_region.contents[
+                                                index
+                                              ]
+                                            }
+                                          </option>
+                                        );
+                                      }
+                                    )}
+                                  </select>
                                   {errors.meeting_region && (
-                                    <div className="invalid_message">
+                                    <div className="invalid-feedback">
                                       {errors.meeting_region}
                                     </div>
                                   )}

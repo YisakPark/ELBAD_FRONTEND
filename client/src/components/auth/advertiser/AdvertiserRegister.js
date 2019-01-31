@@ -3,11 +3,14 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "../../../actions/authActions";
-import TextFieldGroup from "../../common/TextFieldGroup";
-import TextAreaFieldGroup from "../../common/TextAreaFieldGroup";
-import SelectFieldGroup from "../../common/SelectFieldGroup";
+import isEmpty from "../../../validation/is-empty";
 import MiddleBar from "../../common/MiddleBar";
 import classnames from "classnames";
+import {
+  select_field_company_type,
+  select_field_region,
+  select_field_birthday
+} from "../../common/SelectFieldValuesContents";
 
 class AdvertiserRegister extends Component {
   constructor() {
@@ -17,10 +20,12 @@ class AdvertiserRegister extends Component {
       errors: {},
       imagePreviewUrl: "",
       user_type: "advertiser",
-      address: "",
       email_id: "",
       email_address: "",
       name: "",
+      birth_year: "",
+      birth_month: "",
+      birth_date: "",
       password: "",
       password2: "",
       meeting_region: "",
@@ -96,12 +101,22 @@ class AdvertiserRegister extends Component {
       this.state.cell_phone_number1 +
       this.state.cell_phone_number2 +
       this.state.cell_phone_number3;
+    const birthday =
+      isEmpty(this.state.birth_year) ||
+      isEmpty(this.state.birth_month) ||
+      isEmpty(this.state.birth_date)
+        ? ""
+        : this.state.birth_year +
+          "." +
+          this.state.birth_month +
+          "." +
+          this.state.birth_date;
     const formData = new FormData();
 
     formData.append("user_type", this.state.user_type);
     formData.append("email", email);
     formData.append("name", this.state.name);
-    formData.append("address", this.state.address);
+    formData.append("birthday", birthday);
     formData.append("password", this.state.password);
     formData.append("password2", this.state.password2);
     formData.append("meeting_region", this.state.meeting_region);
@@ -117,10 +132,7 @@ class AdvertiserRegister extends Component {
   render() {
     const { errors, next } = this.state;
     const { imagePreviewUrl } = this.state;
-    const select_field = {
-      values: ["corporate_business", "individual_business", "free_lancer"],
-      contents: ["법인사업자", "개인사업자", "프리랜서"]
-    };
+
     let $imagePreview = (
       <img
         style={{ height: "195px", width: "200px" }}
@@ -199,23 +211,6 @@ class AdvertiserRegister extends Component {
                             </div>
                           )}
                         </div>
-                        <div className="form-group">
-                          <input
-                            type="text"
-                            className={classnames("form-control mt-5", {
-                              "is-invalid": errors.address
-                            })}
-                            placeholder="주소"
-                            name="address"
-                            value={this.state.address}
-                            onChange={this.onChange}
-                          />
-                          {errors.address && (
-                            <div className="invalid_message">
-                              {errors.address}
-                            </div>
-                          )}
-                        </div>
                         <div className="form-group form-inline mt-5">
                           <input
                             type="text"
@@ -263,6 +258,98 @@ class AdvertiserRegister extends Component {
                             </div>
                           )}
                         </div>
+                        <div className="form-group form-inline mt-5">
+                          <select
+                            className={classnames("form-control col-md-4", {
+                              "is-invalid": errors.birthday
+                            })}
+                            name="birth_year"
+                            onChange={this.onChange}
+                            value={this.state.birth_year}
+                          >
+                            <option value="" key="0" defaultValue hidden>
+                              출생년도
+                            </option>
+                            {select_field_birthday.year.values.map(
+                              (value, index) => {
+                                return (
+                                  <option value={value} key={index + 1}>
+                                    {select_field_birthday.year.contents[index]}
+                                  </option>
+                                );
+                              }
+                            )}
+                          </select>
+
+                          <p
+                            className="col-md-1 text-center"
+                            style={{ marginTop: "15px" }}
+                          >
+                            -
+                          </p>
+
+                          <select
+                            className={classnames("form-control col-md-3", {
+                              "is-invalid": errors.birthday
+                            })}
+                            name="birth_month"
+                            onChange={this.onChange}
+                            value={this.state.birth_month}
+                          >
+                            <option value="" key="0" defaultValue hidden>
+                              월
+                            </option>
+                            {select_field_birthday.month.values.map(
+                              (value, index) => {
+                                return (
+                                  <option value={value} key={index + 1}>
+                                    {
+                                      select_field_birthday.month.contents[
+                                        index
+                                      ]
+                                    }
+                                  </option>
+                                );
+                              }
+                            )}
+                          </select>
+
+                          <p
+                            className="col-md-1 text-center"
+                            style={{ marginTop: "15px" }}
+                          >
+                            -
+                          </p>
+
+                          <select
+                            className={classnames("form-control col-md-3", {
+                              "is-invalid": errors.birthday
+                            })}
+                            name="birth_date"
+                            onChange={this.onChange}
+                            value={this.state.birth_date}
+                          >
+                            <option value="" key="0" defaultValue hidden>
+                              일
+                            </option>
+                            {select_field_birthday.date.values.map(
+                              (value, index) => {
+                                return (
+                                  <option value={value} key={index + 1}>
+                                    {select_field_birthday.date.contents[index]}
+                                  </option>
+                                );
+                              }
+                            )}
+                          </select>
+
+                          {errors.birthday && (
+                            <div className="invalid_message">
+                              {errors.birthday}
+                            </div>
+                          )}
+                        </div>
+
                         <div className="form-group form-inline mt-5">
                           <div className="col-md-6">
                             <div className="row">
@@ -359,18 +446,38 @@ class AdvertiserRegister extends Component {
                               </div>
                               <div className="col-md-12 mt-4">
                                 <div className="form-group">
-                                  <input
-                                    type="text"
+                                  <select
                                     className={classnames("form-control", {
                                       "is-invalid": errors.meeting_region
                                     })}
-                                    placeholder="미팅 가능 지역"
                                     name="meeting_region"
-                                    value={this.state.meeting_region}
                                     onChange={this.onChange}
-                                  />
+                                    value={this.state.meeting_region}
+                                  >
+                                    <option
+                                      value=""
+                                      key="0"
+                                      defaultValue
+                                      hidden
+                                    >
+                                      미팅 가능 지역
+                                    </option>
+                                    {select_field_region.values.map(
+                                      (value, index) => {
+                                        return (
+                                          <option value={value} key={index + 1}>
+                                            {
+                                              select_field_region.contents[
+                                                index
+                                              ]
+                                            }
+                                          </option>
+                                        );
+                                      }
+                                    )}
+                                  </select>
                                   {errors.meeting_region && (
-                                    <div className="invalid_message">
+                                    <div className="invalid-feedback">
                                       {errors.meeting_region}
                                     </div>
                                   )}
@@ -394,13 +501,18 @@ class AdvertiserRegister extends Component {
                                     >
                                       사업자 유형을 선택하세요
                                     </option>
-                                    {select_field.values.map((value, index) => {
-                                      return (
-                                        <option value={value} key={index + 1}>
-                                          {select_field.contents[index]}
-                                        </option>
-                                      );
-                                    })}
+                                    {select_field_company_type.values.map(
+                                      (value, index) => {
+                                        return (
+                                          <option value={value} key={index + 1}>
+                                            {
+                                              select_field_company_type
+                                                .contents[index]
+                                            }
+                                          </option>
+                                        );
+                                      }
+                                    )}
                                   </select>
                                   {errors.company_type && (
                                     <div className="invalid-feedback">

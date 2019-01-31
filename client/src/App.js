@@ -8,9 +8,11 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-//import { PrivateRoute } from "./components/common/PrivateRouteGroup";
-import { CreatorPrivateRoute } from "./components/common/PrivateRouteGroup";
-import { AdvertiserPrivateRoute } from "./components/common/PrivateRouteGroup";
+import {
+  PrivateRoute,
+  CreatorPrivateRoute,
+  AdvertiserPrivateRoute
+} from "./components/common/PrivateRouteGroup";
 
 import Topbar from "./components/layout/Topbar";
 import Navbar from "./components/layout/Navbar";
@@ -113,12 +115,13 @@ class App extends Component {
               <Route exact path="/creator_list" component={CreatorList} />
               <Route exact path="/campaign_list" component={CampaignList} />
               <Route exact path="/login" component={Login} />
-              <Route
-                exact
-                path="/email_verification"
-                component={EmailVerification}
-              />
-
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/email_verification"
+                  component={EmailVerification}
+                />
+              </Switch>
               {/*
               <Switch>
                 <CreatorPrivateRoute

@@ -1,3 +1,16 @@
+@font-face {
+  font-family: "Noto Sans KR";
+  src: url("../NotoSansKR/NotoSansKR-Light.otf") format("opentype");
+}
+
+body {
+  font-family: "Noto Sans KR";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+}
 /* your styles go here */
 
 .topbar_drop_down_item {

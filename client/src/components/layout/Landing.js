@@ -4,14 +4,24 @@ import Typed from "react-typed";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import isEmpty from "../../validation/is-empty";
 
 class Landing extends Component {
   render() {
     const { verified } = this.props.auth.user;
+    const show_verified_info =
+      this.props.location.state && this.props.location.state.show_verified_info
+        ? this.props.location.state.show_verified_info
+        : false;
     return (
       <div>
         <div className="container">
           <div className="row">
+            {show_verified_info && (
+              <div className="col-md-12 text-center alert alert-success">
+                이메일 인증이 완료되었습니다!
+              </div>
+            )}
             {verified === false && (
               <div className="col-md-12 text-center alert alert-danger">
                 아직 이메일 인증이 되지 않았습니다! 링크를 눌러 이메일로 전송된

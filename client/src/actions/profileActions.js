@@ -1,4 +1,5 @@
 import axios from "axios";
+import BackEndServerAddress from "../components/common/BackEndServerAddress";
 
 import {
   GET_CREATOR_LIST,
@@ -10,14 +11,19 @@ import {
 //Get creator list
 export const getCreatorList = () => dispatch => {
   axios
-    .get("http://10.38.101.70:4000/api/profile/getCreatorList")
+    .get(BackEndServerAddress + "/api/profile/getCreatorList")
     .then(res => {
       dispatch({
         type: GET_CREATOR_LIST,
         payload: res.data
       });
     })
-    .catch(err => dispatch({}));
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
 };
 
 /*

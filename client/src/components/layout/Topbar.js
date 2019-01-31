@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import BackEndServerAddress from "../common/BackEndServerAddress";
 
 class Topbar extends Component {
   onLogoutClick(e) {
@@ -38,7 +39,7 @@ class Topbar extends Component {
           aria-expanded="false"
         >
           <img
-            src={"http://10.38.101.70:4000/api/users/getPhoto/" + user.photo}
+            src={BackEndServerAddress + "/api/users/getPhoto/" + user.photo}
             alt=""
             className="rounded-circle img-fluid topbar_profile_photo"
             style={{ width: "25px", maxHeight: "25px" }}
