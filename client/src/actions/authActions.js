@@ -9,7 +9,6 @@ import { GET_ERRORS, SET_CURRENT_USER, GET_CURRENT_USER } from "./types";
 export const registerUser = (userData, history) => dispatch => {
   dispatch(clearErrors());
   console.log(userData);
-  //    .post("http://10.38.101.70:4000/api/users/register", userData)
   axios
     .post(BackEndServerAddress + "/api/users/register", userData)
     .then(res => {
@@ -70,6 +69,16 @@ export const editUser = (userData, history) => dispatch => {
   axios
     .put(BackEndServerAddress + "/api/users/edit_user", userData)
     .then(res => {
+      logoutUser();
+      //get updated token
+      const { token } = res.data;
+      localStorage.setItem("jwtToken", token);
+      // Set token to Auth header
+      setAuthToken(token);
+      // Decode token to get user data
+      const decoded = jwt_decode(token);
+      // Set current user
+      dispatch(setCurrentUser(decoded));
       history.push("/");
     })
     .catch(err => {

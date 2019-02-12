@@ -57,8 +57,18 @@ class AdvertiserRegister extends Component {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/");
     }
+
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
+      const errors = nextProps.errors;
+      errors.name ||
+      errors.email ||
+      errors.cell_phone_number ||
+      errors.birthday ||
+      errors.password ||
+      errors.password2
+        ? this.setState({ next: false })
+        : this.setState({ next: true });
     }
   }
 

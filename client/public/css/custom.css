@@ -1,10 +1,94 @@
 @font-face {
+  font-family: "Noto Sans KR Thin";
+  src: url("../NotoSansKR/NotoSansKR-Thin.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Noto Sans KR Medium";
+  src: url("../NotoSansKR/NotoSansKR-Medium.otf") format("opentype");
+}
+
+@font-face {
   font-family: "Noto Sans KR";
-  src: url("../NotoSansKR/NotoSansKR-Light.otf") format("opentype");
+  src: url("../NotoSansKR/NotoSansKR-Regular.otf") format("opentype");
+}
+
+:root {
+  --custom_color: #ffa3a5;
+}
+
+/* checkbox */
+.custom-control-input:focus ~ .custom-control-label::before {
+  box-shadow: none !important;
+}
+
+.custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
+  border-color: #6c757d;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+  background-image: none;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+  border-color: #6c757d;
+  background-color: var(--custom_color);
+}
+
+.custom-checkbox .custom-control-label::before {
+  border-radius: 50%;
+}
+
+.custom-control-label::before {
+  position: absolute;
+  top: 0.5rem;
+  left: -1.5rem;
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  pointer-events: none;
+  content: "";
+  background-color: #fff;
+  border: #adb5bd solid 1px;
+}
+
+/* custom radio */
+.custom-checkbox
+  .custom-control-input:indeterminate
+  ~ .custom-control-label::after {
+  background-image: none;
+}
+
+.custom-checkbox
+  .custom-control-input:indeterminate
+  ~ .custom-control-label::before {
+  border-color: #6c757d;
+  background-color: #fff;
+}
+
+.custom-checkbox
+  .custom-control-input:indeterminate
+  ~ .custom-control-label::before {
+  border-color: #6c757d;
+  background-color: #fff;
+}
+
+/* nav pills */
+.nav-link.active.create_campaign {
+  background: url(../img/coral-brushstroke.png);
+  background-size: 178px 50px;
+  background-repeat: no-repeat;
+  background-position-y: center;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  font-family: "Noto Sans KR Medium";
+  color: #212529;
 }
 
 body {
-  font-family: "Noto Sans KR";
+  font-family: "Noto Sans KR Thin";
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -33,7 +117,7 @@ body {
   width: 100%;
   margin-top: 0.25rem;
   font-size: 80%;
-  color: #dc3545;
+  color: var(--custom_color);
 }
 
 .form-group select {
@@ -49,4 +133,19 @@ body {
 .btn-info_blue {
   background-color: #3f54f5;
   border-color: #3f54f5;
+}
+
+.custom_bold {
+  font-family: "Noto Sans KR Medium";
+}
+
+.custom_button {
+  background: var(--custom_color);
+  border: 1px solid var(--custom_color) !important;
+}
+
+.custom_input {
+  border-top: none;
+  border-left: none;
+  border-right: none;
 }
